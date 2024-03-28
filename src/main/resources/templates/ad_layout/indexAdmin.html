@@ -1,22 +1,52 @@
 <!DOCTYPE html>
 <html>
 <head>
-<meta charset="ISO-8859-1">
+<meta charset="utf-8">
 <style type="text/css" th:replace="~{common/_style}"></style>
 <title>Admin</title>
 </head>
 <body>
 	<div th:replace="~{common/_layoutHeader}"></div>
-
+	<a type="button" class="btn btn-outline-primary btn-fw"
+		th:href="@{/admin/create}">Add</a>
 	<div th:replace="~{common/_layoutFormHeader}"></div>
-	<tr>
-		<td>Jacob</td>
-		<td>Photoshop</td>
-		<td class="text-danger"><input type="checkbox" value="1"/></i></td>
-	
-	</tr>
-	<div th:replace="~{common/_layoutFormFooter}"></div>
-	<div th:replace="~{common/_layoutFooter}"></div>
+	<thead>
+		<tr>
+			<th>No.</th>
+			<th>ID</th>
+			<th>Product</th>
+			<th>Brand</th>
+			<th>Price</th>
+			<th>Quantity</th>
+			<th>Active</th>
+			<th>Images</th>
+		</tr>
+	</thead>
+	<tbody>
+		<tr th:each="data,index : ${dataList}">
+			<td th:text="${index.index}+1"></td>
+			<td th:text="${data.idProduct}"></td>
+			<td th:text="${data.nameProduct}"></td>
+			<td th:text="${data.nameBrand}"></td>
+			<td th:text="${data.priceProduct}"></td>
+			<td th:text="${data.quantityProduct}"></td>
+			<td th:text="${data.activeProduct == 1 ? 'YES' : 'NO'}"></td>
+			<td><a th:href="@{/admin/images(id=${data.idProduct})}">View</a></td>
 
+		</tr>
+		<div th:replace="~{common/_layoutFormFooter}"></div>
+		<div class="btn-group" role="group" aria-label="Basic example"
+		th:if="${totalPages != null && totalPages > 0}">
+		<!-- Thymeleaf loop để tạo link cho mỗi trang -->
+		<a th:each="pageNum : ${#numbers.sequence(1, totalPages)}"
+			th:href="@{/admin(page=${pageNum})}" th:text="${pageNum}"
+			class="btn btn-outline-secondary"></a>
+	</div>
+		<div th:replace="~{common/_layoutFooter}"></div>
 </body>
 </html>
+
+<script type="text/javascript">
+	var x = document.getElementById("nameForm")
+	x.innerHTML = "Product Table"
+</script>

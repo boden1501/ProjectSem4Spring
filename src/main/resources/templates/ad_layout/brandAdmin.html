@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html>
+<head>
+<div th:replace="~{common/_style}"></div>
+<meta charset="utf-8">
+<title>Brand</title>
+</head>
+<body>
+	<div th:replace="~{common/_layoutHeader}"></div>
+	<div class="col-ml-12 grid-margin stretch-card">
+		<div class="card">
+			<div class="card-body">
+				<h4 class="card-title">Brand form</h4>
+				<form class="forms-sample" th:action="@{( ${findBrand == null} ? '/admin/submitBrand' : '/admin/updateBrand' )}" th:method="post" id="brandForm">
+					<div class="form-group" th:if="${findBrand != null}">
+						<label for="exampleInputID">ID Brand</label> 
+						<input
+							type="text" name="id_brand" class="form-control"
+							id="exampleInputID" 
+							th:value="${findBrand != null ? findBrand.id_brand : ''}" readonly>
+
+					</div>
+					<div class="form-group">
+						<label for="exampleInputUsername1">Name Brand</label> <input
+							type="text" name="name_brand" class="form-control"
+							id="exampleInputUsername1" placeholder="Name Brand"
+							th:value="${findBrand != null ? findBrand.name_brand : ''}">
+
+					</div>
+					<div class="form-group">
+						<label for="exampleInputActive">Active</label> <input
+							type="checkbox" class="checkboxForm" value="1" name="active_brand"
+							th:checked="${findBrand != null ? findBrand.active_brand == 1 : false}">
+
+					</div>
+					<div th:if="${errorMessage}">
+						<p style="color: red;">[[${errorMessage}]]</p>
+					</div>
+					 <input type="submit" class="btn btn-primary mr-2" value="Add" name="btnAdd" id="btnAdd" th:if="${findBrand == null}">
+					<input name="_method" type="hidden" value="PUT" th:if="${findBrand != null}" />
+					<input type="submit" class="btn btn-primary mr-2" value="Save" name="btnUpdate"
+                            id="btnUpdate" th:if="${findBrand != null}"> 
+					<input type="reset"
+						class="btn btn-light" value="Clear">
+				</form>
+			</div>
+		</div>
+	</div>
+	<div th:replace="~{common/_layoutFormHeader}"></div>
+	<thead>
+		<tr>
+			<th>No.</th>
+			<th>ID</th>
+			<th>Brand</th>
+			<th>Active</th>
+			<th>Edit</th>
+		</tr>
+	</thead>
+	<tbody>
+		<tr th:each="brand, index : ${brandList}">
+			<td class="text-left" th:text="${index.index + 1}+${row}"></td>
+			<td class="text-left" th:text="${brand.id_brand}"></td>
+			<td class="text-left" th:text="${brand.name_brand}"></td>
+			<td class="text-left"><input type="checkbox"
+				class="checkboxForm" th:checked="${brand.active_brand == 1}" disabled>
+			</td>
+			<td class="text-left"><a
+				th:href="@{/admin/brandsUpdate(id=${brand.id_brand})}"> <i
+					class="ti-pencil-alt"></i>
+			</a></td>
+		</tr>
+	</tbody>
+	<div th:replace="~{common/_layoutFormFooter}"></div>
+	<div class="btn-group" role="group" aria-label="Basic example"
+		th:if="${totalPages != null && totalPages > 0}">
+		<!-- Thymeleaf loop để tạo link cho mỗi trang -->
+		<a th:each="pageNum : ${#numbers.sequence(1, totalPages)}"
+			th:href="@{/admin/brand(page=${pageNum})}" th:text="${pageNum}"
+			class="btn btn-outline-secondary"></a>
+	</div>
+	<div th:replace="~{common/_layoutFooter}"></div>
+</body>
+</html>

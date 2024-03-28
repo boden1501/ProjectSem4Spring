@@ -10420,8 +10420,13 @@ textarea.form-control {
 
 .form-group {
   margin-bottom: 1rem;
-}
 
+}
+ .checkboxForm{
+ 	margin:4px;
+  	width:17px;
+  	height:17px;
+ }
 .form-text {
   display: block;
   margin-top: 0.25rem;

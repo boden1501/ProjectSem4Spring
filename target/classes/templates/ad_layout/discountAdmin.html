@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<div th:replace="~{common/_style}"></div>
+<title>Discount Event</title>
+</head>
+<body>
+	<div th:replace="~{common/_layoutHeader}"></div>
+	<div class="col-ml-12 grid-margin stretch-card">
+		<div class="card">
+			<div class="card-body">
+				<h4 class="card-title">Discount form</h4>
+				<form class="forms-sample"
+					th:action="@{( ${findDiscount == null} ? '/admin/submitDiscount' : '/admin/updateDiscount' )}"
+					th:method="post" id="discountForm">
+					<div class="form-group" th:if="${findDiscount != null}">
+						<label for="exampleInputID">ID Discount</label> <input type="text"
+							name="idDiscount" class="form-control" id="exampleInputID"
+							th:value="${findDiscount != null ? findDiscount.idDiscount : ''}"
+							readonly>
+
+					</div>
+					<div class="form-group">
+						<label for="exampleInputDateStart">Date Start</label> <input
+							type="datetime-local" name="dateStart" class="form-control"
+							id="exampleInputDateStart" placeholder="Date Start"
+							th:value="${findDiscount != null ? findDiscount.dateStart : ''}">
+
+					</div>
+					<div class="form-group">
+						<label for="exampleInputDateEnd">Date End</label> <input
+							type="datetime-local" name="dateEnd" class="form-control"
+							id="exampleInputDateEnd" placeholder="Date End"
+							th:value="${findDiscount != null ? findDiscount.dateEnd : ''}">
+
+					</div>
+					<div class="form-group">
+						<label for="exampleInputDateEnd">Percent (0.01-1)</label> <input
+							type="number" name="percentDiscount" class="form-control"
+							id="exampleInputPercentDiscount" placeholder="Percent Discount"
+							min="0.01" max="1" step="0.01"
+							th:value="${findDiscount != null ? findDiscount.percentDiscount : ''}">
+					</div>
+
+					<!--  					<div class="form-group">
+						<label for="exampleInputActive">Active</label> <input
+							type="checkbox" class="checkboxForm" value="1"
+							name="active_brand"
+							th:checked="${findDiscount != null ? findDiscount.active_brand == 1 : false}">
+
+					</div>
+-->
+					<div th:if="${errorMessage}">
+						<p style="color: red;">[[${errorMessage}]]</p>
+					</div>
+					<input type="submit" class="btn btn-primary mr-2" value="Add"
+						name="btnAdd" id="btnAdd" th:if="${findDiscount == null}">
+					<input name="_method" type="hidden" value="PUT"
+						th:if="${findDiscount != null}" /> <input type="submit"
+						class="btn btn-primary mr-2" value="Save" name="btnUpdate"
+						id="btnUpdate" th:if="${findDiscount != null}"> <input
+						type="reset" class="btn btn-light" value="Clear">
+				</form>
+			</div>
+		</div>
+	</div>
+	<div th:replace="~{common/_layoutFormHeader}"></div>
+	<thead>
+		<tr>
+			<th>No.</th>
+			<th>ID</th>
+			<th>Date Start</th>
+			<th>Date End</th>
+			<th>Percent Discount</th>
+			<th>Edit</th>
+		</tr>
+	</thead>
+	<tbody>
+		<tr th:each="discount, index : ${discountList}">
+			<td class="text-left" th:text="${index.index + 1}+${row}"></td>
+			<td class="text-left" th:text="${discount.idDiscount}"></td>
+			<td class="text-left" th:text="${discount.dateStart}"></td>
+			<td class="text-left" th:text="${discount.dateEnd}"></td>
+			<td class="text-left" th:text="${discount.percentDiscount}"></td>
+			<td class="text-left"><a
+				th:href="@{/admin/discountUpdate(id=${discount.idDiscount})}"> <i
+					class="ti-pencil-alt"></i>
+			</a></td>
+		</tr>
+	</tbody>
+	<div th:replace="~{common/_layoutFormFooter}"></div>
+	<div class="btn-group" role="group" aria-label="Basic example"
+		th:if="${totalPages != null && totalPages > 0}">
+		<!-- Thymeleaf loop để tạo link cho mỗi trang -->
+		<a th:each="pageNum : ${#numbers.sequence(1, totalPages)}"
+			th:href="@{/admin/discount(page=${pageNum})}" th:text="${pageNum}"
+			class="btn btn-outline-secondary"></a>
+	</div>
+	<div th:replace="~{common/_layoutFooter}"></div>
+</body>
+</html>

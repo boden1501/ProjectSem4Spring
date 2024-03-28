@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<div th:replace="~{common/_style}"></div>
+<title>Image Product</title>
+</head>
+<body>
+	<div th:replace="~{common/_layoutHeader}"></div>
+	<div class="col-ml-12 grid-margin stretch-card">
+		<div class="card">
+			<div class="card-body">
+				<form class="forms-sample" th:method="get" id="categoryForm">
+					<div class="form-group">
+						<label for="exampleInputID">ID Product</label> <input type="text"
+							name="id" class="form-control" id="exampleInputID" readonly
+							th:if="${findProduct != null}"
+							th:value="${findProduct.idProduct}">
+
+					</div>
+					<div class="form-group">
+						<label for="exampleInputUsername1">Name Product</label> <input
+							type="text" name="name" class="form-control"
+							id="exampleInputUsername1" placeholder="Name Category"
+							readonly="readonly" th:if="${findProduct != null}"
+							th:value="${findProduct.nameProduct}">
+
+					</div>
+				</form>
+				<form class="forms-sample" th:action="@{/admin/addImages}"
+					th:method="post" id="categoryForm" enctype="multipart/form-data">
+
+					<div class="form-group">
+						<label>File upload</label> <input type="file" name="img"
+							accept="image/*" class="file-upload-default" multiple="multiple">
+						<div class="input-group col-xs-12">
+							<input type="text" class="form-control file-upload-info"
+								readonly="readonly" placeholder="Upload Image" name="imgText">
+							<span class="input-group-append">
+								<button class="file-upload-browse btn btn-primary" type="button">Upload</button>
+							</span>
+						</div>
+
+						<button type="submit">Nhan</button>
+					</div>
+				</form>
+				<h3 th:if="${imgList!=null}">Danh sách hình ảnh đã chọn:</h3>
+
+				<form th:action="@{/admin/saveImage}" method="post"
+					enctype="multipart/form-data">
+					<div class="image-preview">
+
+						<div>
+
+							<table>
+								<tbody>
+									<tr th:each="img, iterStat: ${imgList}">
+										<td th:text="${img.fileName}" th:value="${img.fileName}" name="image"></td>
+										<td>
+											<input type="checkbox" checked>
+										</td>
+									</tr>
+								</tbody>
+							</table>
+						</div>
+
+					</div>
+					<button class="btn btn-primary" type="submit"
+						th:if="${imgList!=null}">SAVE</button>
+				</form>
+
+
+
+			</div>
+		</div>
+	</div>
+	<div th:replace="~{common/_layoutFooter}"></div>
+</body>
+</html>
+<script>
+	$("input:checkbox").on('click', function() {
+		// in the handler, 'this' refers to the box clicked on
+		var $box = $(this);
+		if ($box.is(":checked")) {
+			// the name of the box is retrieved using the .attr() method
+			// as it is assumed and expected to be immutable
+			var group = "input:checkbox[name='" + $box.attr("name") + "']";
+			// the checked state of the group/box on the other hand will change
+			// and the current value is retrieved using .prop() method
+			$(group).prop("checked", false);
+			$box.prop("checked", true);
+		} else {
+			$box.prop("checked", false);
+		}
+	});
+</script>
