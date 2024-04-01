@@ -10,6 +10,7 @@ public class User {
 	private String avatar;
 	private int role;
 	private String phone; 
+	private Integer active;
 	public static final String TBL_usr="member";
 	public static final String id_usr="idUser";
 	public static final String name_usr="Name";
@@ -20,6 +21,7 @@ public class User {
 	public static final String phone_usr="Phone";
 	public static final String avatar_usr="Avatar";
 	public static final String address_usr="Address";
+	public static final String active_usr="active";
 	public int getId() {
 		return id;
 	}
@@ -73,6 +75,12 @@ public class User {
 	}
 	public void setRole(int role) {
 		this.role = role;
+	}
+	public Integer getActive() {
+		return active;
+	}
+	public void setActive(Integer active) {
+		this.active = active;
 	}
 	
 }

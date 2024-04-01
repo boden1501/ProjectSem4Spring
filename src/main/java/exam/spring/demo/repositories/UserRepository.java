@@ -8,7 +8,12 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowMapper;
 import org.springframework.stereotype.Repository;
+import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
 
+import exam.spring.demo.model.Category;
 import exam.spring.demo.model.User;
 
 
@@ -17,6 +22,7 @@ import exam.spring.demo.model.User;
 public class UserRepository {
 	@Autowired
 	JdbcTemplate db;
+
 	class userRowMapper implements RowMapper<User> {
 		@Override
 		public User mapRow(ResultSet rs,int rowNum) throws SQLException{
@@ -30,14 +36,43 @@ public class UserRepository {
 			item.setPhone(rs.getString(User.phone_usr));
 			item.setUsername(rs.getString(User.username_usr));
 			item.setAvatar(rs.getString(User.avatar_usr));
+			item.setActive(rs.getInt(User.active_usr));
 			return item;
 		}
 	}
-	public List<User> findAll() {
+	public List<User> findAll() {// hien thi day du database
 		return db.query("select * from member", new userRowMapper());
 	}
 	//public int insert(User Category) {
 		//return db.update("insert into category ( name_cate, active_cate) " + "values( ?, ?)",
 			//	new Object[] { Category.getName() });
 	//}
+	public User findById(int id) {
+		return db.queryForObject("select * from member where idUser=?", new userRowMapper(), 
+				new Object[] {id});
+	}
+	
+	public int update(User User) {
+		return db.update("update member set active = ? where idUser =?",
+				new Object[] { User.getActive(), User.getId()});
+	}
+
+	public List<User> findByName(String name,String phone) {
+	    return db.query("select * from member where Name like ? or Phone like ?", new userRowMapper(),
+	            new Object[]{"%" + name + "%","%" + phone + "%"});
+	}
+	public List<User> findAll(int offset, int size){
+		int start =0 ;
+		if (offset>size) {
+			start= offset-size;
+	}
+
+		return db.query("SELECT * FROM member LIMIT ?, ?", new Object[] { start, size}, 
+				new userRowMapper());
+	}
+	public int getTotalRows() {
+	    return db.queryForObject("SELECT COUNT(*) FROM member ", Integer.class);
+	    }	
 }
+
+
