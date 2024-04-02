@@ -73,6 +73,16 @@ public class UserRepository {
 	public int getTotalRows() {
 	    return db.queryForObject("SELECT COUNT(*) FROM member ", Integer.class);
 	    }	
+	public int registerUser(User User) {
+		return db.update("insert into member (Name, UserName, Password, Address, Phone, Email)" + "values(?, ?, ?, ?, ?, ?)", new Object[] {
+				User.getName(),
+				User.getUsername(),
+				User.getPassword(),
+				User.getAddress(),
+				User.getPhone(),
+				User.getEmail()
+				});
+	}
 }
 
 

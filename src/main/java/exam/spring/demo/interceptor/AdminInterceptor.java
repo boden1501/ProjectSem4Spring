@@ -12,7 +12,7 @@ public class AdminInterceptor implements HandlerInterceptor {
 	@Override
 	public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler)
 			throws Exception {
-		Object acc = request.getSession().getAttribute("myacc");
+		Object acc = request.getSession().getAttribute("myaccAD");
 		if (acc != null) {
 			Logger log = Logger.getGlobal();
 			log.info("exit account");

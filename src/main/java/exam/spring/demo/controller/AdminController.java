@@ -51,7 +51,7 @@ public class AdminController {
 
 	@RequestMapping(value = "/login", method = RequestMethod.GET)
 	public String loginfrm(Model model, HttpServletRequest request) {
-		Object acc = request.getSession().getAttribute("myacc");
+		Object acc = request.getSession().getAttribute("myaccAD");
 		if (acc != null) {
 			return "redirect:/admin";
 		}
@@ -59,7 +59,7 @@ public class AdminController {
 	}
 
 	@RequestMapping(value = "/chklogin", method = RequestMethod.POST)
-	public String loginCHK(@RequestParam("usr") String username, @RequestParam("pwd") String password,
+	public String loginCHK(@RequestParam("usrad") String username, @RequestParam("pwdad") String password,
 			HttpServletRequest request) {
 		Logger log = Logger.getGlobal();
 		log.info(username + " " + password);
@@ -67,7 +67,7 @@ public class AdminController {
 		for (User usr : dataList) {
 			if (username.equals(usr.getUsername())
 					|| username.equals(usr.getEmail()) && password.equals(usr.getPassword())) {
-				request.getSession().setAttribute("myacc", username);
+				request.getSession().setAttribute("myaccAD", username);
 				return "redirect:/admin";
 			}
 
@@ -78,14 +78,13 @@ public class AdminController {
 
 	@RequestMapping(value = "/chklogout", method = RequestMethod.GET)
 	public String logoutCHK(Model model, HttpServletRequest request) {
-		request.getSession().removeAttribute("myacc");
+		request.getSession().removeAttribute("myaccAD");
 		return "redirect:/admin/login";
 	}
 
 	
 
-<<<<<<< HEAD
-=======
+
 	@RequestMapping(value = "/category", method = RequestMethod.GET)
 	public String categoryAdmin(Model model, @RequestParam(defaultValue = "0") int page,
 			@RequestParam(defaultValue = "5") int size) {
@@ -157,6 +156,6 @@ public class AdminController {
 		return "redirect:/admin/category";
 	}
 
->>>>>>> 27e1aa728a77e9d6ee9f49cb6ad8a97f69d6e5cf
+
 }
 

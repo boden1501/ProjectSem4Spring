@@ -55,16 +55,19 @@
 							<table>
 								<tbody>
 									<tr th:each="img, iterStat: ${imgList}">
-										<td th:text="${img.fileName}" th:value="${img.fileName}" name="image"></td>
+										<td th:text="${img.fileName}" th:value="${img.fileName}"
+											name="image"></td>
 										<td>
-											<input type="checkbox" checked>
-										</td>
+                                			<input type="checkbox" name="mainImg" th:value="${img.fileName}" onclick="toggleMain(this)"/>
+                                		</td>
 									</tr>
 								</tbody>
 							</table>
 						</div>
 
 					</div>
+
+					
 					<button class="btn btn-primary" type="submit"
 						th:if="${imgList!=null}">SAVE</button>
 				</form>
@@ -78,6 +81,12 @@
 </body>
 </html>
 <script>
+function toggleMain(checkbox) {
+    var isChecked = checkbox.checked;
+    var mainImgInput = document.getElementById("mainImg");
+    mainImgInput.value = isChecked ? 1 : 0;
+}
+
 	$("input:checkbox").on('click', function() {
 		// in the handler, 'this' refers to the box clicked on
 		var $box = $(this);

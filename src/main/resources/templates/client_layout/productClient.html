@@ -1,0 +1,53 @@
+<!doctype html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8" />
+	<div th:replace="~{common/client/_styleClient}"></div>
+	<title>Product</title>
+</head>
+<body>
+	<div th:replace="~{common/client/_layoutHeaderClient}"></div>
+	<img src="C:/Users/ADMIN/Documents/workspace-spring-tool-suite-4-4.21.0.RELEASE/Vinh/static/images/9ef911ef24505f452fa9643a66aa22e8.jpg" class="img-responsive" alt="">
+	<!-- <div class="product"> -->
+		<div class="container">
+			<div class="spec ">
+				<h3>Products</h3>
+				<div class="ser-t">
+					<b></b>
+					<span><i></i></span>
+					<b class="line"></b>
+				</div>
+			</div>
+				<div class=" con-w3l agileinf">
+							<div class="col-md-3 pro-1" th:each="product:${proList}">
+								<div class="col-m">
+								<a href="#" data-toggle="modal" data-target="#myModal1" class="offer-img">
+										<img src="~/static/images/demo.png" class="img-responsive" alt="">
+									</a>
+									<div class="mid-1">
+										<div class="women">
+											<h6><a href="single.html" th:text="${product.nameProduct}">Wheat</a></h6>							
+										</div>
+										<div class="mid-2">
+											<p ><!-- $<label>7.00</label> --><em class="item_price"  th:text="${product.priceProduct}"></em>VNĐ</p>
+											  <div class="block">
+												<div class="starbox small ghosting"> </div>
+											</div>
+											<div class="clearfix"></div>
+										</div>
+											<div class="add">
+										   <button class="btn btn-danger my-cart-btn my-cart-b" data-id="24" data-name="Wheat" data-summary="summary 24" data-price="6.00" data-quantity="1" data-image="images/of24.png">Add to Cart</button>
+										</div>
+									</div>
+								</div>
+							</div>
+							
+							
+							<div class="clearfix"></div>
+						 </div>
+		</div>
+	<!-- </div> -->
+	<div th:replace="~{common/client/_layoutFooterClient}"></div>
+</body>
+</html>
+<div th:replace="~{common/client/_script}"></div>

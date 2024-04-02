@@ -10,6 +10,7 @@ import org.springframework.jdbc.core.RowMapper;
 import org.springframework.stereotype.Repository;
 
 import exam.spring.demo.model.Brand;
+import exam.spring.demo.model.Image;
 import exam.spring.demo.model.Product;
 import exam.spring.demo.model.Product;
 import exam.spring.demo.repositories.ProductRepository.ProductRowMapper;
@@ -34,6 +35,8 @@ public class ProductRepository {
 			item.setActiveProduct(rs.getInt(Product.active_product));
 			item.setDetail(rs.getString(Product.detail_product));
 			item.setNameBrand(rs.getString(Brand.nameBrand));
+//			item.setImg(rs.getString(Image.image_img));
+//			item.setMainImg(rs.getInt(Image.main_img));
 			return item;
 		}
 
@@ -41,7 +44,7 @@ public class ProductRepository {
 	}
 	public List<Product> findProductAll() {
 
-		return db.query("SELECT * FROM product", new ProductRowMapper());
+		return db.query("SELECT * FROM product p join brand b on p.idBrand=b.idBrand ", new ProductRowMapper());
 	}
 
 	public List<Product> findAll(int offset, int size) {

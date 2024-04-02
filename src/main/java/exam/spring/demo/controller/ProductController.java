@@ -75,40 +75,42 @@ public class ProductController {
 	}
 
 	@RequestMapping(value = "/addImages", method = RequestMethod.POST)
-	public String addProduct(@RequestParam("img") List<MultipartFile> images, HttpSession session, @ModelAttribute("uploadedFiles") List<TempImages> uploadedFiles) {
-	    List<TempImages> currentImageList = (List<TempImages>) session.getAttribute("imgList");
-	    if (currentImageList == null) {
-	        currentImageList = new ArrayList<>();
-	    }
-	    	for (MultipartFile cuFile : images) {
-	    		try {
-	    			if (!cuFile.isEmpty()) {
-	                    currentImageList.add(new TempImages(cuFile.getOriginalFilename(), cuFile.getBytes()));
-	                }
-	    		} catch (IOException e) {
-	    			// Handle exception
-	    		}
-	    	}
-	    
-	    session.setAttribute("imgList", currentImageList);
+	public String addProduct(@RequestParam("img") List<MultipartFile> images, HttpSession session,
+			@ModelAttribute("uploadedFiles") List<TempImages> uploadedFiles) {
+		List<TempImages> currentImageList = (List<TempImages>) session.getAttribute("imgList");
+		if (currentImageList == null) {
+			currentImageList = new ArrayList<>();
+		}
+		for (MultipartFile cuFile : images) {
+			try {
+				if (!cuFile.isEmpty()) {
+					currentImageList.add(new TempImages(cuFile.getOriginalFilename(), cuFile.getBytes()));
+				}
+			} catch (IOException e) {
+				// Handle exception
+			}
+		}
 
-	    return "redirect:/admin/imagesLoad";
+		session.setAttribute("imgList", currentImageList);
+
+		return "redirect:/admin/imagesLoad";
 	}
 
 	@RequestMapping(value = "/imagesLoad", method = RequestMethod.GET)
-	public String imageProduct(Model model, HttpSession session) {
+	public String imageProduct(Model model, HttpSession session,RedirectAttributes redirectAttributes) {
 		Product findProduct = (Product) session.getAttribute("Product");
 		model.addAttribute("findProduct", findProduct);
 		List<MultipartFile> imageList = (List<MultipartFile>) session.getAttribute("imgList");
 		model.addAttribute("imgList", imageList);
+		redirectAttributes.addAttribute("id", findProduct.getIdProduct());
 		return "ad_layout/imageProduct";
 	}
 
 	@RequestMapping(value = "/saveImage", method = RequestMethod.POST)
-	public String saveImage(@Validated Image images,@RequestParam("main") List<Integer> main, HttpSession session,
+	public String saveImage(@RequestParam(value = "mainImg", required = false) String nameImg, HttpSession session,
 			@ModelAttribute("uploadedFiles") List<TempImages> upLoadFile, Model model,
 			RedirectAttributes redirectAttributes) {
-		String uploadDir = "static/images/";
+		String uploadDir = "src/main/resources/static/images/";
 		List<TempImages> currentImageList = (List<TempImages>) session.getAttribute("imgList");
 		Product findProduct = (Product) session.getAttribute("Product");
 		model.addAttribute("findProduct", findProduct);
@@ -116,12 +118,21 @@ public class ProductController {
 			for (TempImages img : currentImageList) {
 				try {
 					String fileName = img.getFileName();
-					
-
 					byte[] fileData = img.getData();
+					Integer mainImg;
+					if (nameImg != null) {
+						if (fileName.equals(nameImg)) {
+							mainImg = 1;
+						} else {
+							mainImg = 0;
+						}
+					} else {
+						mainImg = 0;
+					}
 					System.out.println("name:" + fileName);
 					System.out.println("PATH:" + Paths.get(uploadDir + fileName));
 					Files.write(Paths.get(uploadDir + fileName), fileData);
+					imgRepository.insert(findProduct.getIdProduct(), mainImg, fileName);
 					System.out.println("Thanh cong");
 					session.removeAttribute("imgList");
 				} catch (IOException e) {
@@ -129,11 +140,7 @@ public class ProductController {
 				}
 			}
 		}
-		List<Image> imageList=(List<Image>) images;
-		for(Image ima:imageList) {
-			imgRepository.insert(findProduct.getIdProduct(), images.getMain(), ima.getImage());
-			
-		}
+
 		redirectAttributes.addAttribute("id", findProduct.getIdProduct());
 		return "redirect:/admin/images";
 	}

@@ -12,6 +12,8 @@ public class Product {
 	private float avgVote;
 	private int idCategory;
 	private int activeProduct;
+	private String img;
+	private int mainImg;
 	public static final String id_product="idProduct";
 	public static final String name_product="Name";
 	public static final String price_product="Price";
@@ -87,6 +89,18 @@ public class Product {
 	}
 	public void setNameBrand(String nameBrand) {
 		this.nameBrand = nameBrand;
+	}
+	public String getImg() {
+		return img;
+	}
+	public void setImg(String img) {
+		this.img = img;
+	}
+	public int getMainImg() {
+		return mainImg;
+	}
+	public void setMainImg(int mainImg) {
+		this.mainImg = mainImg;
 	}
 	
 }
