@@ -1,31 +1,12 @@
 <!DOCTYPE html>
 <html>
 <head>
-<<<<<<< HEAD
-<meta charset="ISO-8859-1">
-=======
 <meta charset="utf-8">
->>>>>>> 27e1aa728a77e9d6ee9f49cb6ad8a97f69d6e5cf
 <style type="text/css" th:replace="~{common/_style}"></style>
 <title>Admin</title>
 </head>
 <body>
 	<div th:replace="~{common/_layoutHeader}"></div>
-<<<<<<< HEAD
-
-	<div th:replace="~{common/_layoutFormHeader}"></div>
-	<tr>
-		<td>Jacob</td>
-		<td>Photoshop</td>
-		<td class="text-danger"><input type="checkbox" value="1"/></i></td>
-	
-	</tr>
-	<div th:replace="~{common/_layoutFormFooter}"></div>
-	<div th:replace="~{common/_layoutFooter}"></div>
-
-</body>
-</html>
-=======
 	<a type="button" class="btn btn-outline-primary btn-fw"
 		th:href="@{/admin/create}">Add</a>
 	<div th:replace="~{common/_layoutFormHeader}"></div>
@@ -39,6 +20,7 @@
 			<th>Quantity</th>
 			<th>Active</th>
 			<th>Images</th>
+			<th>Comment</th>
 		</tr>
 	</thead>
 	<tbody>
@@ -51,7 +33,7 @@
 			<td th:text="${data.quantityProduct}"></td>
 			<td th:text="${data.activeProduct == 1 ? 'YES' : 'NO'}"></td>
 			<td><a th:href="@{/admin/images(id=${data.idProduct})}">View</a></td>
-
+	        <td><a th:href="@{/admin/comments(id=${data.idProduct})}">View</a></td>
 		</tr>
 		<div th:replace="~{common/_layoutFormFooter}"></div>
 		<div class="btn-group" role="group" aria-label="Basic example"
@@ -69,4 +51,3 @@
 	var x = document.getElementById("nameForm")
 	x.innerHTML = "Product Table"
 </script>
->>>>>>> 27e1aa728a77e9d6ee9f49cb6ad8a97f69d6e5cf
