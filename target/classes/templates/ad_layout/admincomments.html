@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="ISO-8859-1">
+<div th:replace="~{common/_style}"></div>
+<title>Insert title here</title>
+</head>
+<body>
+	<table></table>
+	<div th:replace="~{common/_layoutHeader}"></div>
+	<div class="col-ml-12 grid-margin stretch-card">
+		<div class="card">
+			<div class="card-body">
+
+				<form class="forms-sample">
+					<div class="form-group">
+						<label for="exampleInputID">ID Category</label> <input type="text"
+							name="id" class="form-control" id="exampleInputID"
+							th:value="${productList.idProduct}" readonly>
+
+					</div>
+					<div class="form-group">
+						<label for="exampleInputUsername1">Name Category</label> <input
+							type="text" name="name" class="form-control"
+							id="exampleInputUsername1" th:value="${productList.nameProduct}"
+							placeholder="Name Category" readonly>
+
+					</div>
+
+					<div th:if="${errorMessage}">
+						<p style="color: red;">[[${errorMessage}]]</p>
+					</div>
+
+				</form>
+			</div>
+		</div>
+	</div>
+	<form th:action="@{/admin/commentDelete}" th:method="DELETE">
+	<div th:replace="~{common/_layoutFormHeader}"></div>
+	<thead>
+		<tr>
+			<th>No.</th>
+			<th>ID</th>
+			<th>NameUser</th>
+			<th>comment</th>
+			<th>delete</th>
+		</tr>
+	</thead>
+	<tbody>
+		
+			<tr th:each="cmt, index : ${commentlist}">
+
+				<!-- <td class="text-left" th:text="${index.index + 1}+${row}"></td> -->
+				<td>1</td>
+				<td class="text-left" th:text="${cmt.idComment}"></td>
+				<td class="text-left" th:text="${cmt.Name}"></td>
+				<td class="text-left" th:text="${cmt.Content}"></td>
+				<td class="text-left">
+                    <button type="submit">Delete</button>
+                    <input type="hidden" th:value="${cmt.idComment}" name="btn" />
+                    <input type="hidden" th:value="${cmt.idProduct}" name="btnid" />
+                </td>
+
+
+			</tr>
+		
+	</tbody>
+		<div th:replace="~{common/_layoutFormFooter}"></div>
+	</form>
+
+	<div class="btn-group" role="group" aria-label="Basic example"
+		th:if="${totalPages != null && totalPages > 0}">
+		<!-- Thymeleaf loop để tạo link cho mỗi trang -->
+		<a th:each="pageNum : ${#numbers.sequence(1, totalPages)}"
+			th:href="@{/admin/category(page=${pageNum})}" th:text="${pageNum}"
+			class="btn btn-outline-secondary"></a>
+	</div>
+	<div th:replace="~{common/_layoutFooter}"></div>
+</body>
+</html>
+
+

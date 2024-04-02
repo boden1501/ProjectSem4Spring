@@ -22,6 +22,7 @@
 			<th>Quantity</th>
 			<th>Active</th>
 			<th>Images</th>
+			<th>Comment</th>
 		</tr>
 	</thead>
 	<tbody>
@@ -34,7 +35,7 @@
 			<td th:text="${data.quantityProduct}"></td>
 			<td th:text="${data.activeProduct == 1 ? 'YES' : 'NO'}"></td>
 			<td><a th:href="@{/admin/images(id=${data.idProduct})}">View</a></td>
-
+	        <td><a th:href="@{/admin/comments(id=${data.idProduct})}">View</a></td>
 		</tr>
 		<div th:replace="~{common/_layoutFormFooter}"></div>
 		<div class="btn-group" role="group" aria-label="Basic example"
