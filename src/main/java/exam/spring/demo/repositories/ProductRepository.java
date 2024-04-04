@@ -2,6 +2,7 @@ package exam.spring.demo.repositories;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.text.DecimalFormat;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -21,24 +22,25 @@ public class ProductRepository {
 	JdbcTemplate db;
 
 	class ProductRowMapper implements RowMapper<Product> {
-		@Override
-		public Product mapRow(ResultSet rs, int rowNum) throws SQLException {
-			Product item = new Product();
-			item.setIdProduct(rs.getInt(Product.id_product));
-			item.setNameProduct(rs.getString(Product.name_product));
-			item.setPriceProduct(rs.getDouble(Product.price_product));
-			item.setQuantityProduct(rs.getInt(Product.quantity_product));
-			item.setIdCategory(rs.getInt(Product.id_category));
-			item.setIdDiscount(rs.getInt(Product.id_discount));
-			item.setAvgVote(rs.getFloat(Product.avgvote_product));
-			item.setIdBrand(rs.getInt(Product.id_brand));
-			item.setActiveProduct(rs.getInt(Product.active_product));
-			item.setDetail(rs.getString(Product.detail_product));
-			item.setNameBrand(rs.getString(Brand.nameBrand));
-//			item.setImg(rs.getString(Image.image_img));
-//			item.setMainImg(rs.getInt(Image.main_img));
-			return item;
-		}
+		  @Override
+		    public Product mapRow(ResultSet rs, int rowNum) throws SQLException {
+		        Product item = new Product();
+		        item.setIdProduct(rs.getInt(Product.id_product));
+		        item.setNameProduct(rs.getString(Product.name_product));
+		        double price = rs.getDouble(Product.price_product);
+		        DecimalFormat decimalFormat = new DecimalFormat("#,### VNĐ");
+		        String formattedPrice = decimalFormat.format(price);
+		        item.setPriceProduct(formattedPrice); 
+		        item.setQuantityProduct(rs.getInt(Product.quantity_product));
+		        item.setIdCategory(rs.getInt(Product.id_category));
+		        item.setIdDiscount(rs.getInt(Product.id_discount));
+		        item.setAvgVote(rs.getFloat(Product.avgvote_product));
+		        item.setIdBrand(rs.getInt(Product.id_brand));
+		        item.setActiveProduct(rs.getInt(Product.active_product));
+		        item.setDetail(rs.getString(Product.detail_product));
+		        item.setNameBrand(rs.getString(Brand.nameBrand));
+		        return item;
+		    }
 
 		
 	}
@@ -63,7 +65,10 @@ public class ProductRepository {
 		 return db.queryForObject("select * from product p join brand b on p.idBrand=b.idBrand where idProduct=?", new ProductRowMapper(),
 	                new Object[] { id });
 	}
-
+	public List<Product> findByName(String Name) {
+		 return db.query("select * from product p join brand b on p.idBrand=b.idBrand where Name like ?", new ProductRowMapper(),
+	                new Object[] { "%" + Name + "%" });
+	}
 	public int insert(Product product) {
 		return db.update(
 				"INSERT INTO product (Name,idBrand,idCategory,Price,Quantity,Active,Detail) VALUES (?, ?, ?, ?, ?, ?, ?)",

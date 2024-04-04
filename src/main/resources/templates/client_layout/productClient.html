@@ -7,7 +7,6 @@
 </head>
 <body>
 	<div th:replace="~{common/client/_layoutHeaderClient}"></div>
-	<img src="C:/Users/ADMIN/Documents/workspace-spring-tool-suite-4-4.21.0.RELEASE/Vinh/static/images/9ef911ef24505f452fa9643a66aa22e8.jpg" class="img-responsive" alt="">
 	<!-- <div class="product"> -->
 		<div class="container">
 			<div class="spec ">
@@ -22,14 +21,14 @@
 							<div class="col-md-3 pro-1" th:each="product:${proList}">
 								<div class="col-m">
 								<a href="#" data-toggle="modal" data-target="#myModal1" class="offer-img">
-										<img src="~/static/images/demo.png" class="img-responsive" alt="">
+										<img src="/client/images/demo.png" class="img-responsive" alt="">
 									</a>
 									<div class="mid-1">
 										<div class="women">
 											<h6><a href="single.html" th:text="${product.nameProduct}">Wheat</a></h6>							
 										</div>
 										<div class="mid-2">
-											<p ><!-- $<label>7.00</label> --><em class="item_price"  th:text="${product.priceProduct}"></em>VNĐ</p>
+											<p ><!-- $<label>7.00</label> --><em class="item_price"  th:text="${product.priceProduct}"></em></p>
 											  <div class="block">
 												<div class="starbox small ghosting"> </div>
 											</div>

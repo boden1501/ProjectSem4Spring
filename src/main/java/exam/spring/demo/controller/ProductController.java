@@ -45,14 +45,19 @@ public class ProductController {
 	ImageRepository imgRepository;
 
 	@RequestMapping(value = "/create", method = RequestMethod.GET)
-	public String createAdmin(Model model) {
+	public String createProduct(Model model) {
 		List<Category> categoryList = cateRepository.findCategoryAll();
 		List<Brand> brandList = brandRepository.findBrandAll();
 		model.addAttribute("categoryList", categoryList);
 		model.addAttribute("brandList", brandList);
 		return "ad_layout/createAdmin";
 	}
-
+	@RequestMapping(value="/findProduct",method=RequestMethod.POST)
+	public String findProduct(@RequestParam("txtSearch") String txtSearch,Model model) {
+		List<Product> productList = productRepository.findByName(txtSearch); 
+		model.addAttribute("dataList", productList);
+		return "ad_layout/indexAdmin";
+	}
 	@CrossOrigin
 	@RequestMapping(value = "/createProduct", method = RequestMethod.POST)
 	public String createProduct(@Validated Product item) {

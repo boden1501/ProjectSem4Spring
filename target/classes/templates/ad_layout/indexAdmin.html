@@ -7,14 +7,31 @@
 </head>
 <body>
 	<div th:replace="~{common/_layoutHeader}"></div>
-<<<<<<< HEAD
-		<img src="C:/Users/ADMIN/Documents/workspace-spring-tool-suite-4-4.21.0.RELEASE/Vinh/static/images/9ef911ef24505f452fa9643a66aa22e8.jpg" class="img-responsive" alt="">
-	
-=======
->>>>>>> a5ec7881d63f7099007e68c3b4a83ccffc98d826
+
 	<a type="button" class="btn btn-outline-primary btn-fw"
 		th:href="@{/admin/create}">Add</a>
 	<div th:replace="~{common/_layoutFormHeader}"></div>
+	<div class="row">
+		<div class="col-6">
+			<form th:action="@{/admin/findProduct}" method="post">
+				<ul class="navbar-nav mr-lg-2">
+					<li class="nav-item nav-search d-none d-lg-block">
+						<div class="input-group">
+							<div class="input-group-prepend hover-cursor"
+								id="navbar-search-icon">
+								<span class="input-group-text" id="search"> <i
+									class="ti-search"></i>
+								</span>
+							</div>
+							<input type="search" class="form-control" id="navbar-search-input"
+								placeholder="Search now" aria-label="search"
+								aria-describedby="search" name="txtSearch">
+						</div>
+					</li>
+				</ul>
+			</form>
+		</div>
+	</div>
 	<thead>
 		<tr>
 			<th>No.</th>
@@ -38,16 +55,16 @@
 			<td th:text="${data.quantityProduct}"></td>
 			<td th:text="${data.activeProduct == 1 ? 'YES' : 'NO'}"></td>
 			<td><a th:href="@{/admin/images(id=${data.idProduct})}">View</a></td>
-	        <td><a th:href="@{/admin/comments(id=${data.idProduct})}">View</a></td>
+			<td><a th:href="@{/admin/comments(id=${data.idProduct})}">View</a></td>
 		</tr>
 		<div th:replace="~{common/_layoutFormFooter}"></div>
 		<div class="btn-group" role="group" aria-label="Basic example"
-		th:if="${totalPages != null && totalPages > 0}">
-		<!-- Thymeleaf loop để tạo link cho mỗi trang -->
-		<a th:each="pageNum : ${#numbers.sequence(1, totalPages)}"
-			th:href="@{/admin(page=${pageNum})}" th:text="${pageNum}"
-			class="btn btn-outline-secondary"></a>
-	</div>
+			th:if="${totalPages != null && totalPages > 0}">
+			<!-- Thymeleaf loop để tạo link cho mỗi trang -->
+			<a th:each="pageNum : ${#numbers.sequence(1, totalPages)}"
+				th:href="@{/admin(page=${pageNum})}" th:text="${pageNum}"
+				class="btn btn-outline-secondary"></a>
+		</div>
 		<div th:replace="~{common/_layoutFooter}"></div>
 </body>
 </html>

@@ -4,7 +4,7 @@ public class Product {
 	private int idProduct;
 	private String nameProduct;
 	private String nameBrand;
-	private double priceProduct;
+	private String priceProduct;
 	private int quantityProduct;
 	private String Detail;
 	private int idBrand;
@@ -36,10 +36,11 @@ public class Product {
 	public void setNameProduct(String nameProduct) {
 		this.nameProduct = nameProduct;
 	}
-	public double getPriceProduct() {
+	
+	public String getPriceProduct() {
 		return priceProduct;
 	}
-	public void setPriceProduct(double priceProduct) {
+	public void setPriceProduct(String priceProduct) {
 		this.priceProduct = priceProduct;
 	}
 	public int getQuantityProduct() {
