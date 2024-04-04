@@ -35,7 +35,7 @@ public class CommentRepository {
     	return db.query("SELECT *  FROM comment", new CommentRowMapper());
     }
     
-    public List<Comment> finnAll(int offset, int size){
+    public List<Comment> finAll(int offset, int size){
     	int start=0;
     	if(offset>size) {
     		start=offset-size;
@@ -54,7 +54,7 @@ public class CommentRepository {
     }
     
     public int insert(Comment comment) {
-    	return db.update("INNSERT INTO comment(nameComment, active) VALUES(?,?)",
+    	return db.update("INSERT INTO comment(nameComment, active) VALUES(?,?)",
     			new Object[] {comment.getIdComment(), comment.getIdComment()});
     }
     
