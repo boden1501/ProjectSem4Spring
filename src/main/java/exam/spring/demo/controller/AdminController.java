@@ -84,10 +84,6 @@ public class AdminController {
 
 	
 
-<<<<<<< HEAD
-
-=======
->>>>>>> a5ec7881d63f7099007e68c3b4a83ccffc98d826
 	@RequestMapping(value = "/category", method = RequestMethod.GET)
 	public String categoryAdmin(Model model, @RequestParam(defaultValue = "0") int page,
 			@RequestParam(defaultValue = "5") int size) {
@@ -159,9 +155,6 @@ public class AdminController {
 		return "redirect:/admin/category";
 	}
 
-<<<<<<< HEAD
 
-=======
->>>>>>> a5ec7881d63f7099007e68c3b4a83ccffc98d826
 }
 
