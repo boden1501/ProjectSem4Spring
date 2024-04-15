@@ -91,7 +91,7 @@
 
 	<div class="container rounded bg-gray mt-5 mb-5"
 		style="margin-top: 20px">
-		<form th:action="@{/updateProfile}" th:method="put">
+		<form th:action="@{/updateProfile}" th:method="put" enctype="multipart/form-data">
 			<div class="row">
 				<div class="col-md-3 border-right">
 					<div
@@ -107,11 +107,10 @@
 
 					</div>
 					<div>
-						<input type="file" id="selectedFile" style="display: none;"
+						<input type="file" id="selectedFile" style="display: none;" name="imgAvt"
 							/> <input type="button" value="Change Avatar"
 							onclick="document.getElementById('selectedFile').click();"
 							style="align-content: center; margin-left: 40px; margin-top: 10px" />
-						<input type="text"   id="fileNameDisplay"/>
 					</div>
 
 				</div>

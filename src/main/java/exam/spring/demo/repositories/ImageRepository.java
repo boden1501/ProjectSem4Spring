@@ -32,6 +32,9 @@ public class ImageRepository {
 	public List<Image> findImgAll() {
 		return db.query("SELECT * FROM image", new ImageRowMapper());
 	}
+	public List<Image> findListImgByID(int id){
+		return db.query("SELECT * FROM image where idProduct=?", new ImageRowMapper(),new Object[] {id});
+	}
     public int insert(int idProduct,int main,String Image) {
         return db.update("INSERT INTO image (idProduct,main,Image) VALUES (?,?,?)",
                 new Object[] { idProduct,main,Image});

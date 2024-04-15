@@ -25,7 +25,7 @@ public class AuthController {
 	
 	@RequestMapping("/login")
 	public String login(HttpServletRequest request) {
-		Object acc = request.getSession().getAttribute("myacc");
+		Object acc = request.getSession().getAttribute("usrList");
 		
 		if (acc != null) {
 			return "redirect:/";
