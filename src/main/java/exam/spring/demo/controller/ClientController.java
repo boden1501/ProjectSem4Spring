@@ -77,7 +77,7 @@ public class ClientController {
 			model.addAttribute("proList", proList);
 			model.addAttribute("imgList", imgList);
 			model.addAttribute("imgProduct", imgProduct);
-			model.addAttribute("message", "Your cart is currently empty!");
+			
 		} else {
 			Product findProduct = proRepository.findById(id);
 			model.addAttribute("findProduct", findProduct);
@@ -87,9 +87,12 @@ public class ClientController {
 			model.addAttribute("proList", proList);
 			model.addAttribute("imgList", imgList);
 			model.addAttribute("imgProduct", imgProduct);
-
+			
 			List<Cart> cartList = cartRepository.loadAllByID(usr.getId());
+			int countCart=cartRepository.getNum(usr.getId());
+			if(countCart==0) {model.addAttribute("message", "Your cart is currently empty!");}
 			model.addAttribute("cartList", cartList);
+			model.addAttribute("countCart",countCart);
 
 		}
 		return "client_layout/detail";
@@ -123,7 +126,11 @@ public class ClientController {
 		}
 		return "redirect:/product/detail?id=" + id;
 	}
-
+	@RequestMapping(value="/product/delete",method=RequestMethod.DELETE)
+	public String deleteCart(@RequestParam("id") int id,@RequestParam("idCart") int idCart) {
+		cartRepository.deleteByID(idCart);
+		return "redirect:/product/detail?id="+id;
+	}
 	@RequestMapping(value = "/profile", method = RequestMethod.GET)
 	public String profile(HttpSession session, Model model) {
 		User usr = (User) session.getAttribute("usrList");

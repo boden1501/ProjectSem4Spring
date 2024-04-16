@@ -1,0 +1,45 @@
+<table class="table table-hover"
+	th:if="${#lists.isEmpty(cartList) == false}">
+	<thead>
+		<tr>
+			<th>Index</th>
+			<th>Product</th>
+			<th>Quantity</th>
+			<th>Price</th>
+			<th>Discount</th>
+			<th></th>
+		</tr>
+	</thead>
+	<tbody>
+		<tr th:each="cart,index:${cartList}">
+			<td th:text="${index.index+1}">index</td>
+			<td>
+				<p th:text="${cart.nameProduct}"></p> <img th:if="${cart.Image}"
+				style="width: 80px; height: 80px"
+				th:src="@{'/client/images/'+${cart.Image}}" alt="" />
+			</td>
+			<td><input type="number" th:value="${cart.Quantity}" /></td>
+			<td th:text="${cart.priceProduct}"></td>
+			<td></td>
+			<td><input type="hidden" th:value="${cart.idCart}" name="idCart">
+				<button type="submit">x</button></td>
+
+		</tr>
+
+	</tbody>
+</table>
+</form>
+<div th:if="${#lists.isEmpty(cartList)}">
+	<p class="text-danger" th:text="${message}"></p>
+</div>
+</div>
+
+<!-- Modal footer -->
+<div class="modal-footer">
+	<a href="/checkout"><button type="button" class="btn btn-success">Purchase</button></a>
+	<button type="button" class="btn btn-danger" data-dismiss="modal">Close</button>
+</div>
+
+</div>
+</div>
+</div>

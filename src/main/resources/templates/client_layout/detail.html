@@ -132,7 +132,11 @@
 
 	<div th:replace="~{common/client/_layoutFooterClient}"></div>
 	<!-- //footer-->
-
+	<div th:replace="~{common/client/_layoutCartHeader}"></div>
+		<form th:action="@{/product/delete}" th:method="DELETE"> 
+			
+			<input type="hidden" th:value="${findProduct.idProduct}" name="id">
+	<div th:replace="~{common/client/_layoutCartFooter}"></div>
 	<div th:replace="~{common/client/_script}"></div>
 </body>
 <!-- <script th:src="@{/webjars/jquery/jquery.min.js}"></script>

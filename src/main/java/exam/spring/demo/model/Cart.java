@@ -5,6 +5,7 @@ public class Cart {
 	private int idProduct;
 	private int Quantity;
 	private int idUser;
+	private String Image;
 	private String nameProduct;
 	private String priceProduct;
 	public final static String id_cart="idCart";
@@ -13,6 +14,7 @@ public class Cart {
 	public final static String id_User="idUser";
 	public final static String name_Product="Name";
 	public final static String price_Product="Price";
+	public final static String image_Product="Image";
 	public int getIdCart() {
 		return idCart;
 	}
@@ -48,6 +50,12 @@ public class Cart {
 	}
 	public void setPriceProduct(String priceProduct) {
 		this.priceProduct = priceProduct;
+	}
+	public String getImage() {
+		return Image;
+	}
+	public void setImage(String image) {
+		Image = image;
 	}
 	
 }

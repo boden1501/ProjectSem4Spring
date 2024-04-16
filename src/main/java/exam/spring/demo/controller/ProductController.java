@@ -110,8 +110,6 @@ public class ProductController {
 		}
 
 		model.addAttribute("images", imageInfos);
-
-//	    storageService.deleteAll();
 		redirectAttributes.addFlashAttribute("id", id);
 		return "ad_layout/imageProduct";
 	}
@@ -125,7 +123,6 @@ public class ProductController {
 			// TODO: handle exception
 		}
 		System.out.println("id" + id);
-//		redirectAttributes.addFlashAttribute("id",id);
 		return "redirect:/admin/images?id=" + id;
 	}
 
