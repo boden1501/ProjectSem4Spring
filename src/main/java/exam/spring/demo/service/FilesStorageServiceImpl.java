@@ -19,7 +19,7 @@ import exam.spring.demo.model.ImageData;
 
 @Service
 public class FilesStorageServiceImpl implements FilesStorageService{
-	private final Path root = Paths.get("./uploads");
+	private final Path root = Paths.get("./upload");
 
 	  @Override
 	  public void init() {

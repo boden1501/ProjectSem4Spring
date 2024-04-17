@@ -77,8 +77,8 @@ public class ProductRepository {
 						product.getActiveProduct(), product.getDetail() });
 	}
 
-//    public int update(Product Product) {
-//        return db.update("update Product set nameProduct = ?, active = ? where idProduct = ?",
-//                new Object[] { Product.getName(), Product.getActive(), Product.getId()});
-//    }
+    public int update(int idDiscount,int idProduct) {
+        return db.update("update product set idDiscount=? where idProduct = ?",
+                new Object[] { idDiscount,idProduct});
+    }
 }

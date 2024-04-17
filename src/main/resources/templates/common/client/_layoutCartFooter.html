@@ -16,7 +16,7 @@
 			<td>
 				<p th:text="${cart.nameProduct}"></p> <img th:if="${cart.Image}"
 				style="width: 80px; height: 80px"
-				th:src="@{'/client/images/'+${cart.Image}}" alt="" />
+				th:src="@{'/images/'+${cart.Image}}" alt="" />
 			</td>
 			<td><input type="number" th:value="${cart.Quantity}" /></td>
 			<td th:text="${cart.priceProduct}"></td>

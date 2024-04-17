@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<div th:replace="~{common/_style}"></div>
+<title>Discount</title>
+</head>
+<body>
+	<div th:replace="~{common/_layoutHeader}"></div>
+	<a type="button" class="btn btn-outline-primary btn-fw"
+		th:href="@{/admin/discount}">Create</a>
+	<form th:action="@{/admin/discountAdd}" th:method="PUT">
+		<div th:replace="~{common/_layoutFormHeader}"></div>
+		<thead>
+			<tr>
+				<th>No.</th>
+				<th>ID</th>
+				<th>Date Start</th>
+				<th>Date End</th>
+				<th>Percent Discount</th>
+				<th>Edit</th>
+				<th></th>
+			</tr>
+		</thead>
+		<tbody>
+
+
+			<tr th:each="discount, index : ${discountList}">
+				<td class="text-left" th:text="${index.index + 1}+${row}"></td>
+				<td class="text-left" th:text="${discount.idDiscount}"></td>
+				<td class="text-left" th:text="${discount.dateStart}"></td>
+				<td class="text-left" th:text="${discount.dateEnd}"></td>
+				<td class="text-left" th:text="${discount.percentDiscount}"></td>
+				<td class="text-left"><a
+					th:href="@{/admin/discountUpdate(id=${discount.idDiscount})}">
+						<i class="ti-pencil-alt"></i>
+				</a></td>
+
+				<td>
+					<input type="hidden" th:value="${product.idProduct}" name="idProduct" /> 
+					<button th:if="${product.idDiscount}==${discount.idDiscount}" class="btn btn-primary" disabled="disabled">Selected</button>
+					<button type="submit" th:if="${product.idDiscount}!=${discount.idDiscount}" th:value="${discount.idDiscount}" name="idDiscount" class="btn btn-outline-primary btn-fw">Select</button>
+				</td>
+			</tr>
+
+		</tbody>
+		<div th:replace="~{common/_layoutFormFooter}"></div>
+	</form>
+	<div class="btn-group" role="group" aria-label="Basic example"
+		th:if="${totalPages != null && totalPages > 0}">
+		<!-- Thymeleaf loop để tạo link cho mỗi trang -->
+		<a th:each="pageNum : ${#numbers.sequence(1, totalPages)}"
+			th:href="@{/admin/discount(page=${pageNum})}" th:text="${pageNum}"
+			class="btn btn-outline-secondary"></a>
+	</div>
+	<div th:replace="~{common/_layoutFooter}"></div>
+</body>
+</html>

@@ -5,6 +5,8 @@ package exam.spring.demo.repositories;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.text.DecimalFormat;
+import java.text.NumberFormat;
+import java.util.Currency;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -39,8 +41,18 @@ public class CartRepository {
 		return db.query("select * from cart", new CartRowMapper());
 	}
 	public List<Cart> loadAllByID(int idUser){
-		return db.query("select * from cart c join product p on c.idProduct=p.idProduct join image i on i.idProduct=c.idProduct where idUser=? and main like '1'", new CartRowMapper(),new Object[]{idUser});
+		return db.query("select * from cart c join product p on c.idProduct=p.idProduct join image i on i.idProduct=c.idProduct where idUser=? and main=1", new CartRowMapper(),new Object[]{idUser});
 	}
+
+
+	public String getTotal(int idUser) {
+		double price = db.queryForObject("select sum(c.Quantity*p.Price) from cart c join product p on c.idProduct=p.idProduct join image i on i.idProduct=c.idProduct where idUser=? and main=1", Integer.class,new Object[]{idUser});
+        DecimalFormat decimalFormat = new DecimalFormat("#,### VNĐ");
+        String formattedTotal = decimalFormat.format(price);
+
+	    return formattedTotal;
+	}
+
 	public int insert(int idProduct,int quantity,int idUser) {
 		return db.update("insert into cart(idProduct,Quantity,idUser) value(?,?,?)",new Object[] {idProduct,quantity,idUser});
 	}

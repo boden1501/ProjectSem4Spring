@@ -15,9 +15,11 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 
 import exam.spring.demo.model.Category;
+import exam.spring.demo.model.Discount;
 import exam.spring.demo.model.Product;
 import exam.spring.demo.model.User;
 import exam.spring.demo.repositories.CategoryRepository;
+import exam.spring.demo.repositories.DiscountRepository;
 import exam.spring.demo.repositories.ProductRepository;
 import exam.spring.demo.repositories.UserRepository;
 import jakarta.servlet.http.HttpServletRequest;
@@ -31,6 +33,8 @@ public class AdminController {
 	CategoryRepository cateRepository;
 	@Autowired
 	ProductRepository productRepository;
+	@Autowired
+	DiscountRepository discountRepository;
 	@RequestMapping(value = "", method = RequestMethod.GET)
 	public String indexAdmin(Model model,@RequestParam(defaultValue = "0") int page, @RequestParam(defaultValue = "5") int size) {
 		int offset=page*size;
@@ -41,6 +45,8 @@ public class AdminController {
 		if (page > 1) {
 			row = offset - size;
 		}
+		List<Discount> discountList = discountRepository.findDiscountAll();
+		model.addAttribute("discountList",discountList);
 		model.addAttribute("dataList", dataList);
 		model.addAttribute("row", row);
 		model.addAttribute("totalRows", totalRows);

@@ -510,7 +510,7 @@ a {
 								<tbody>
 									<tr th:each="cart:${cartList}">
 										<th scope="row"><img
-											th:src="@{'/client/images/'+${cart.Image}}"
+											th:src="@{'/images/'+${cart.Image}}"
 											alt="product-img" title="product-img"
 											class="avatar-lg rounded"></th>
 										<td>
@@ -534,16 +534,16 @@ a {
 										<td colspan="2">
 											<h5 class="font-size-14 m-0">Sub Total :</h5>
 										</td>
-										<td>$ 780</td>
+										<td th:text="${subTotalCart}">$ 780</td>
 									</tr>
 									<tr>
 										<td colspan="2">
 											<h5 class="font-size-14 m-0">Discount :</h5>
 										</td>
-										<td>- $ 78</td>
+										<td th:text="'-'+${discount}">0</td>
 									</tr>
 
-									<tr>
+									<!-- <tr>
 										<td colspan="2">
 											<h5 class="font-size-14 m-0">Shipping Charge :</h5>
 										</td>
@@ -554,13 +554,13 @@ a {
 											<h5 class="font-size-14 m-0">Estimated Tax :</h5>
 										</td>
 										<td>$ 18.20</td>
-									</tr>
+									</tr> -->
 
 									<tr class="bg-light">
 										<td colspan="2">
 											<h5 class="font-size-14 m-0">Total:</h5>
 										</td>
-										<td>$ 745.2</td>
+										<td th:text="${totalCart}">$ 745.2</td>
 									</tr>
 								</tbody>
 							</table>
