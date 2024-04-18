@@ -1,5 +1,6 @@
 package exam.spring.demo.controller;
 
+import java.text.DecimalFormat;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -31,13 +32,31 @@ public class CheckoutController {
 	    List<Cart> cartList = cartRepository.loadAllByID(usr.getId());
 	    String subTotal=cartRepository.getTotal(usr.getId());
 	    System.out.println("total:"+subTotal);
-	    String discount= discountRepository.getDiscount(usr.getId());
-	    System.out.println("discount:" +discount);
-	    model.addAttribute("discount",discount);
-	    String total=cartRepository.getTotal(usr.getId());
+	    for(Cart cart:cartList) {
+	    	if(cart.getIdDiscount()==0) {
+	    		String discount= "0 VNĐ";
+	    	    System.out.println("discount:" +discount);
+	    	    model.addAttribute("discount",discount);
+	    	    String total=cartRepository.getTotal(usr.getId());
+	    	    model.addAttribute("totalCart",total);
+	    	}else {
+	    		String discount= discountRepository.getDiscount(usr.getId());
+	    		double discountTotal=discountRepository.getDiscountTemp(usr.getId());
+	    		double totalTemp=cartRepository.getTotalTemp(usr.getId());
+	    		double temp=totalTemp-discountTotal;
+	    		DecimalFormat decimalFormat = new DecimalFormat("#,### VNĐ");
+	            String formattedTotal = decimalFormat.format(temp);
+	    	    System.out.println("discount:" +discount);
+	    	    model.addAttribute("discount",discount);
+	    	    model.addAttribute("totalCart",formattedTotal);
+	    	}
+	    }
+	    
+
+	
 	    model.addAttribute("cartList",cartList);
 	    model.addAttribute("subTotalCart", subTotal);
-	    model.addAttribute("totalCart",total);
+	    
 	    return "client_layout/checkoutClient";  
 	}
 

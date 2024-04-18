@@ -34,6 +34,7 @@ public class CartRepository {
 	        DecimalFormat decimalFormat = new DecimalFormat("#,### VNĐ");
 	        String formattedPrice = decimalFormat.format(price);
 	        item.setPriceProduct(formattedPrice); 
+	        item.setIdDiscount(rs.getInt(Cart.id_discount));
 			return item;
 		}
 	}
@@ -51,6 +52,9 @@ public class CartRepository {
         String formattedTotal = decimalFormat.format(price);
 
 	    return formattedTotal;
+	}
+	public double getTotalTemp(int idUser) {
+		return db.queryForObject("select sum(c.Quantity*p.Price) from cart c join product p on c.idProduct=p.idProduct join image i on i.idProduct=c.idProduct where idUser=? and main=1", Integer.class,new Object[]{idUser});
 	}
 
 	public int insert(int idProduct,int quantity,int idUser) {

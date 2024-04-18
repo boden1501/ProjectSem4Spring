@@ -63,6 +63,10 @@ public class DiscountRepository {
 
 	    return formattedTotal;
 	}
+	public double getDiscountTemp(int idUser) {
+		return db.queryForObject("SELECT sum(p.Price*d.PercentDiscount*c.Quantity) FROM discount d join product p on p.idDiscount=d.idDiscount join cart c on c.idProduct=p.idProduct where idUser=?", Integer.class,new Object[]{idUser});
+
+	}
     public int getTotalRows() {
         return db.queryForObject("SELECT COUNT(*) FROM discount", Integer.class);
     }
