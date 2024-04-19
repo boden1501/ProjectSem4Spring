@@ -1,0 +1,68 @@
+
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="utf-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <!-- The above 3 meta tags *must* come first in the head; any other head content must come *after* these tags -->
+        <meta name="description" content="">
+        <meta name="author" content="">
+        <title>KẾT QUẢ THANH TOÁN</title>
+        <!-- Bootstrap core CSS -->
+        <link href="/assets/bootstrap.min.css" rel="stylesheet"/>
+        <!-- Custom styles for this template -->
+        <link href="/assets/jumbotron-narrow.css" rel="stylesheet"> 
+        <script src="/assets/jquery-1.11.3.min.js"></script>
+    </head>
+    <body>
+
+        <!--Begin display -->
+        <div class="container">
+            <div class="header clearfix">
+                <h3 class="text-muted">KẾT QUẢ THANH TOÁN</h3>
+            </div>
+            <div class="table-responsive">
+                <div class="form-group">
+                    <label >Mã giao dịch thanh toán:</label>
+                    <span th:text="${vnp_TxnRef}"></span>
+                </div>    
+                <div class="form-group">
+                    <label >Số tiền:</label>
+                    <span th:text="${vnp_Amount}"></span>
+                </div>  
+                <div class="form-group">
+                    <label >Mô tả giao dịch:</label>
+                    <span th:text="${vnp_OrderInfo}"></span>
+                </div> 
+                <div class="form-group">
+                    <label >Mã lỗi thanh toán:</label>
+                    <span th:text="${vnp_ResponseCode}"></span>
+                </div> 
+                <div class="form-group">
+                    <label >Mã giao dịch tại CTT VNPAY-QR:</label>
+                    <span th:text="${vnp_TransactionNo}"></span>
+                </div> 
+                <div class="form-group">
+                    <label >Mã ngân hàng thanh toán:</label>
+                    <span th:text="${vnp_BankCode}"></span>
+                </div> 
+                <div class="form-group">
+                    <label >Thời gian thanh toán:</label>
+                    <span th:text="${vnp_PayDate}"></span>
+                </div> 
+                <div class="form-group">
+                    <label >Tình trạng giao dịch:</label>
+                    <span th:if="${vnp_ResponseCode}==00">Giao dịch thành công</span>
+                    <span th:if="${vnp_ResponseCode}!=00">Giao dịch thất bại</span>
+                </div> 
+            </div>
+            <p>
+                &nbsp;
+            </p>
+            <footer class="footer">
+                <p>&copy; VNPAY 2020</p>
+            </footer>
+        </div>  
+    </body>
+</html>
