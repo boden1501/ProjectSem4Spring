@@ -48,7 +48,7 @@ public class ClientController {
 	CartRepository cartRepository;
 
 	@RequestMapping(value = "", method = RequestMethod.GET)
-	public String index(Model model, HttpServletRequest request, HttpSession session) {
+	public String index(Model model, HttpServletRequest request) {
 		List<Category> cateList = cateRepository.findCategoryAll();
 		List<Brand> brandList = brandRepository.findBrandAll();
 		model.addAttribute("cateList", cateList);
@@ -60,6 +60,10 @@ public class ClientController {
 	public String product(Model model) {
 		List<Product> proList = proRepository.findProductAll();
 		List<Image> imgList = imgRepository.findImgAll();
+		List<Category> cateList = cateRepository.findCategoryAll();
+		List<Brand> brandList = brandRepository.findBrandAll();
+		model.addAttribute("cateList", cateList);
+		model.addAttribute("brandList", brandList);
 		model.addAttribute("proList", proList);
 		model.addAttribute("imgList", imgList);
 		return "client_layout/productClient";

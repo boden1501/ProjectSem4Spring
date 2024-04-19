@@ -17,6 +17,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import exam.spring.demo.config.VNPayConfig;
@@ -26,13 +27,16 @@ import jakarta.servlet.http.HttpServletRequest;
 @RestController
 @RequestMapping("/api/payment")
 public class PaymentController {
+
 	@RequestMapping(value = "/create_payment",method = RequestMethod.GET)
 	public ResponseEntity<?> createPayment(HttpServletRequest req) throws UnsupportedEncodingException {
         String orderType = "other";
         String vnp_TxnRef = VNPayConfig.getRandomNumber(8);
         String vnp_IpAddr = VNPayConfig.getIpAddress(req);
         String vnp_TmnCode = VNPayConfig.vnp_TmnCode;
-        long amount=20000000;
+        double total = Double.parseDouble(req.getParameter("total"));
+        long amount = (long) (total * 100);
+
         Map<String, String> vnp_Params = new HashMap<>();
         vnp_Params.put("vnp_Version", VNPayConfig.vnp_Version);
         vnp_Params.put("vnp_Command", VNPayConfig.vnp_Command);
@@ -86,7 +90,7 @@ public class PaymentController {
         payment.setStatus("OK");
         payment.setMessage("Successfully");
         payment.setURL(paymentUrl);
-        return ResponseEntity.status(HttpStatus.OK).body(payment);
+        return ResponseEntity.status(HttpStatus.OK).body(paymentUrl);
 	
 	}
 	

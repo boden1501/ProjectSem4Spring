@@ -17,8 +17,6 @@ public class ProjectSem4Application implements CommandLineRunner {
     }
 
     public void run(String... arg) throws Exception {
-        System.out.println("Initializing file storage service...");
         storageService.init();
-        System.out.println("File storage service initialized successfully.");
     }
 }

@@ -1,8 +1,6 @@
 package exam.spring.demo.model;
 
-public class Checkout {
-	private String idOrder;
-	private String DateCreate;
+public class CheckoutTemp {
 	private String nameUser;
 	private String phoneUser;
 	private String emailUser;
@@ -10,7 +8,6 @@ public class Checkout {
 	private double discountPrice;
 	private double subTotalPrice;
 	private double totalPrice;
-	private int active;
 	public String getNameUser() {
 		return nameUser;
 	}
@@ -35,19 +32,6 @@ public class Checkout {
 	public void setAddressUser(String addressUser) {
 		this.addressUser = addressUser;
 	}
-
-	public String getIdOrder() {
-		return idOrder;
-	}
-	public void setIdOrder(String idOrder) {
-		this.idOrder = idOrder;
-	}
-	public String getDateCreate() {
-		return DateCreate;
-	}
-	public void setDateCreate(String dateCreate) {
-		DateCreate = dateCreate;
-	}
 	public double getDiscountPrice() {
 		return discountPrice;
 	}
@@ -66,11 +50,6 @@ public class Checkout {
 	public void setTotalPrice(double totalPrice) {
 		this.totalPrice = totalPrice;
 	}
-	public int getActive() {
-		return active;
-	}
-	public void setActive(int active) {
-		this.active = active;
-	}
+	
 	
 }
