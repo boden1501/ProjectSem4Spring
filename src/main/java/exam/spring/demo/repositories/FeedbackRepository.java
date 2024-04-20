@@ -26,7 +26,7 @@ public class FeedbackRepository {
 		public Feedback mapRow(ResultSet rs, int rowNum) throws SQLException{
 			Feedback item = new Feedback();
 			item.setIdFeedback(rs.getInt("idComment"));
-			item.setNameUser(rs.getInt("idnameUser"));
+			item.setNameUser(rs.getString("nameUser"));
 			item.setEmail(rs.getString("email"));
 			item.setDetail(rs.getString("Detail"));
 			item.getActive(rs.getInt("active"));

@@ -82,12 +82,12 @@ function hideURLbar(){ window.scrollTo(0,1); } </script>
 					<form th:action="@{/auth/chklogin}" method="post">
 						<div class="key">
 							<i class="fa fa-envelope" aria-hidden="true"></i>
-							<input id="usr" name="usr"  type="text" value="Email" onfocus="this.value = '';" onblur="if (this.value == '') {this.value = 'Email';}" required="">
+							<input id="usr" name="usr"  type="text"  onfocus="this.value = '';" placeholder="UserName" required="">
 							<div class="clearfix"></div>
 						</div>
 						<div class="key">
 							<i class="fa fa-lock" aria-hidden="true"></i>
-							<input id="pwd" name="pwd" type="password" value="Password" onfocus="this.value = '';" onblur="if (this.value == '') {this.value = 'Password';}" required="">
+							<input id="pwd" name="pwd" type="password"  onfocus="this.value = '';" onblur="if (this.value == '') {this.value = 'Password';}" required="">
 							<div class="clearfix"></div>
 						</div>
 						<input type="submit" value="Login">
@@ -95,7 +95,7 @@ function hideURLbar(){ window.scrollTo(0,1); } </script>
 				</div>
 				<div class="forg">
 					<a href="#" class="forg-left">Forgot Password</a>
-					<a href="register.html" class="forg-right">Register</a>
+					<a th:href="@{/auth/register}" class="forg-right">Register</a>
 				<div class="clearfix"></div>
 				</div>
 			</div>

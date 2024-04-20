@@ -2,6 +2,7 @@ package exam.spring.demo.repositories;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.text.DecimalFormat;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.List;
@@ -55,6 +56,17 @@ public class DiscountRepository {
                 new DiscountRowMapper());
     }
 
+	public String getDiscount(int idUser) {
+		double price = db.queryForObject("SELECT sum(p.Price*d.PercentDiscount*c.Quantity) FROM discount d join product p on p.idDiscount=d.idDiscount join cart c on c.idProduct=p.idProduct where idUser=?", Integer.class,new Object[]{idUser});
+        DecimalFormat decimalFormat = new DecimalFormat("#,### VNĐ");
+        String formattedTotal = decimalFormat.format(price);
+
+	    return formattedTotal;
+	}
+	public double getDiscountTemp(int idUser) {
+		return db.queryForObject("SELECT sum(p.Price*d.PercentDiscount*c.Quantity) FROM discount d join product p on p.idDiscount=d.idDiscount join cart c on c.idProduct=p.idProduct where idUser=?", Integer.class,new Object[]{idUser});
+
+	}
     public int getTotalRows() {
         return db.queryForObject("SELECT COUNT(*) FROM discount", Integer.class);
     }

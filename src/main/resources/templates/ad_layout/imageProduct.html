@@ -29,7 +29,7 @@
 				</form>
 				<form class="forms-sample" th:action="@{/admin/addImages}"
 					th:method="post" id="categoryForm" enctype="multipart/form-data">
-
+					<input type="hidden" th:value="${findProduct.idProduct}" name="id" />
 					<div class="form-group">
 						<label>File upload</label> <input type="file" name="img"
 							accept="image/*" class="file-upload-default" multiple="multiple">
@@ -37,55 +37,77 @@
 							<input type="text" class="form-control file-upload-info"
 								readonly="readonly" placeholder="Upload Image" name="imgText">
 							<span class="input-group-append">
-								<button class="file-upload-browse btn btn-primary" type="button">Upload</button>
+								<button class="file-upload-browse btn btn-secondary"
+									type="button">Upload</button>
+								<button class="btn btn-primary" type="submit">Add</button>
 							</span>
 						</div>
 
-						<button type="submit">Nhan</button>
-					</div>
-				</form>
-				<h3 th:if="${imgList!=null}">Danh sách hình ảnh đã chọn:</h3>
-
-				<form th:action="@{/admin/saveImage}" method="post"
-					enctype="multipart/form-data">
-					<div class="image-preview">
-
-						<div>
-
-							<table>
-								<tbody>
-									<tr th:each="img, iterStat: ${imgList}">
-										<td th:text="${img.fileName}" th:value="${img.fileName}"
-											name="image"></td>
-										<td>
-                                			<input type="checkbox" name="mainImg" th:value="${img.fileName}" onclick="toggleMain(this)"/>
-                                		</td>
-									</tr>
-								</tbody>
-							</table>
-						</div>
 
 					</div>
-
-					
-					<button class="btn btn-primary" type="submit"
-						th:if="${imgList!=null}">SAVE</button>
 				</form>
-
-
 
 			</div>
+
 		</div>
 	</div>
+
+	<form th:action="@{/admin/saveImage}" method="post"
+		enctype="multipart/form-data">
+		<h3 th:if="${imgList!=null}">Danh sách hình ảnh đã chọn:</h3>
+		<div class="image-preview">
+			<input type="hidden" th:value="${findProduct.idProduct}" name="id" />
+			<div>
+				<div th:replace="~{common/_layoutFormHeader}"></div>
+				<thead>
+					<tr>
+						<th>Image</th>
+						<th>Main</th>
+						<th>Delete</th>
+					</tr>
+				</thead>
+				<tbody>
+					<tr th:each="imgList:${listImg}">
+						<td><img style="border-radius: 0%; height: 10%; width: 10%;" th:src="@{'/images/'+${imgList.Image}}"
+							alt="" /></td>
+						<td><input type="checkbox" class="checkboxForm" th:checked="${imgList.main == 1}" disabled></td>
+						<td><!-- <a
+							th:href="@{'/admin/images/delete/' + ${imgList.Image} + '?id=' + ${imgList.idProduct}}">Delete</a> -->
+						</td>
+					</tr>
+
+					<tr th:each="image: ${images}">
+						<td><img style="border-radius: 0%; height: 10%; width: 10%;"
+							class="img" th:src="@{${image.url}}" alt="${image.name}"
+							height="60px" /></td>
+						<td><input type="checkbox" name="mainImg"
+							th:value="${image.name}" onclick="toggleMain(this)" th:if="${mainCheck}==null"/></td>
+						<td><a
+							th:href="@{'/admin/images/delete/'+ ${image.name} + '?id=' + ${findProduct.idProduct}}">Delete</a>
+
+						</td>
+					</tr>
+
+					<div th:replace="~{common/_layoutFormFooter}"></div>
+					<button class="btn btn-primary" type="submit"
+						th:if="${images!=null}">SAVE</button>
+			</div>
+
+		</div>
+
+
+
+	</form>
+
 	<div th:replace="~{common/_layoutFooter}"></div>
 </body>
 </html>
 <script>
-function toggleMain(checkbox) {
-    var isChecked = checkbox.checked;
-    var mainImgInput = document.getElementById("mainImg");
-    mainImgInput.value = isChecked ? 1 : 0;
-}
+	function toggleMain(checkbox) {
+		var isChecked = checkbox.checked;
+		var mainImgInput = document.getElementById("mainImg");
+		mainImgInput.value = isChecked ? 1 : 0;
+	}
 
 	$("input:checkbox").on('click', function() {
 		// in the handler, 'this' refers to the box clicked on

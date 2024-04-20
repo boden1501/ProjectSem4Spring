@@ -56,7 +56,10 @@ public class UserRepository {
 		return db.update("update member set active = ? where idUser =?",
 				new Object[] { User.getActive(), User.getId()});
 	}
-
+	public int updateProfile(User User) {
+		return db.update("update member set Name=?,Phone=?,Address=?,Email=?,Avatar=? where idUser =?",
+				new Object[] { User.getName(),User.getPhone(),User.getAddress(),User.getEmail(),User.getAvatar(), User.getId()});
+	}
 	public List<User> findByName(String name,String phone) {
 	    return db.query("select * from member where Name like ? or Phone like ?", new userRowMapper(),
 	            new Object[]{"%" + name + "%","%" + phone + "%"});

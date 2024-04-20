@@ -5,24 +5,30 @@ import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
+import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
-
+import org.springframework.core.io.Resource;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.multipart.MultipartFile;
+import org.springframework.web.servlet.mvc.method.annotation.MvcUriComponentsBuilder;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import exam.spring.demo.model.Brand;
 import exam.spring.demo.model.Category;
 import exam.spring.demo.model.Image;
-
+import exam.spring.demo.model.ImageInfo;
 import exam.spring.demo.model.Product;
 import exam.spring.demo.model.TempImages;
 import exam.spring.demo.repositories.BrandRepository;
@@ -30,6 +36,7 @@ import exam.spring.demo.repositories.CategoryRepository;
 
 import exam.spring.demo.repositories.ImageRepository;
 import exam.spring.demo.repositories.ProductRepository;
+import exam.spring.demo.service.FilesStorageService;
 import jakarta.servlet.http.HttpSession;
 
 @Controller
@@ -43,14 +50,23 @@ public class ProductController {
 	ProductRepository productRepository;
 	@Autowired
 	ImageRepository imgRepository;
+	@Autowired
+	FilesStorageService storageService;
 
 	@RequestMapping(value = "/create", method = RequestMethod.GET)
-	public String createAdmin(Model model) {
+	public String createProduct(Model model) {
 		List<Category> categoryList = cateRepository.findCategoryAll();
 		List<Brand> brandList = brandRepository.findBrandAll();
 		model.addAttribute("categoryList", categoryList);
 		model.addAttribute("brandList", brandList);
 		return "ad_layout/createAdmin";
+	}
+
+	@RequestMapping(value = "/findProduct", method = RequestMethod.POST)
+	public String findProduct(@RequestParam("txtSearch") String txtSearch, Model model) {
+		List<Product> productList = productRepository.findByName(txtSearch);
+		model.addAttribute("dataList", productList);
+		return "ad_layout/indexAdmin";
 	}
 
 	@CrossOrigin
@@ -61,88 +77,121 @@ public class ProductController {
 	}
 
 	@RequestMapping(value = "/images", method = RequestMethod.GET)
-	public String imageProduct(@RequestParam("id") int id, HttpSession session, Model model) {
+	public String imageProduct(RedirectAttributes redirectAttributes, @RequestParam("id") int id, HttpSession session,
+			Model model) {
 		Product findProduct = productRepository.findById(id);
+		List<Image> listImg=imgRepository.findListImgByID(id);
+		int mainCheck=1;
+		for(Image img:listImg) {
+			if(img.getMain()==1) {
+				model.addAttribute("mainCheck",mainCheck);
+			}
+		}
 		session.setAttribute("Product", findProduct);
 		model.addAttribute("findProduct", findProduct);
-		session.removeAttribute("imgList");
-		return "ad_layout/imageProduct";
-	}
+		model.addAttribute("listImg", listImg);
+		List<ImageInfo> imageInfos = new ArrayList<>();
 
-	@ModelAttribute("uploadedFiles")
-	public List<TempImages> initUploadedFiles() {
-		return new ArrayList<>();
+		// Kiểm tra xem có dữ liệu hình ảnh không trước khi loadAll()
+		if (storageService.loadAll().count() > 0) {
+			imageInfos = storageService.loadAll().map(imageData -> {
+				if (imageData != null) {
+					String filename = imageData.getFilename();
+					String url = MvcUriComponentsBuilder
+							.fromMethodName(ProductController.class, "getImage", imageData.getFilename()).build()
+							.toString();
+					byte[] data = imageData.getData();
+					return new ImageInfo(filename, url, data);
+				} else {
+					return null; // Hoặc một giá trị mặc định khác nếu cần
+				}
+			}).filter(Objects::nonNull) // Loại bỏ các phần tử null
+					.collect(Collectors.toList());
+		}
+
+		model.addAttribute("images", imageInfos);
+
+//	    storageService.deleteAll();
+		redirectAttributes.addFlashAttribute("id", id);
+		return "ad_layout/imageProduct";
 	}
 
 	@RequestMapping(value = "/addImages", method = RequestMethod.POST)
-	public String addProduct(@RequestParam("img") List<MultipartFile> images, HttpSession session,
-			@ModelAttribute("uploadedFiles") List<TempImages> uploadedFiles) {
-		List<TempImages> currentImageList = (List<TempImages>) session.getAttribute("imgList");
-		if (currentImageList == null) {
-			currentImageList = new ArrayList<>();
+	public String addProduct(@RequestParam("img") MultipartFile images, RedirectAttributes redirectAttributes,
+			@RequestParam("id") int id) {
+		try {
+			storageService.save(images);
+		} catch (Exception e) {
+			// TODO: handle exception
 		}
-		for (MultipartFile cuFile : images) {
-			try {
-				if (!cuFile.isEmpty()) {
-					currentImageList.add(new TempImages(cuFile.getOriginalFilename(), cuFile.getBytes()));
-				}
-			} catch (IOException e) {
-				// Handle exception
-			}
-		}
-
-		session.setAttribute("imgList", currentImageList);
-
-		return "redirect:/admin/imagesLoad";
+		System.out.println("id" + id);
+//		redirectAttributes.addFlashAttribute("id",id);
+		return "redirect:/admin/images?id=" + id;
 	}
 
-	@RequestMapping(value = "/imagesLoad", method = RequestMethod.GET)
-	public String imageProduct(Model model, HttpSession session,RedirectAttributes redirectAttributes) {
-		Product findProduct = (Product) session.getAttribute("Product");
-		model.addAttribute("findProduct", findProduct);
-		List<MultipartFile> imageList = (List<MultipartFile>) session.getAttribute("imgList");
-		model.addAttribute("imgList", imageList);
-		redirectAttributes.addAttribute("id", findProduct.getIdProduct());
-		return "ad_layout/imageProduct";
+	@RequestMapping(value = "/images/{filename:.+}", method = RequestMethod.GET)
+	public ResponseEntity<Resource> getImage(@PathVariable String filename) throws IOException {
+		Resource file = storageService.load(filename);
+		return ResponseEntity.ok()
+				.header(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=\"" + file.getFilename() + "\"")
+				.body(file);
+	}
+
+	@RequestMapping(value = "/images/delete/{filename:.+}", method = RequestMethod.GET)
+	public String deleteImage(@PathVariable String filename, Model model, RedirectAttributes redirectAttributes,
+			@RequestParam("id") int id) {
+		try {
+			boolean existed = storageService.delete(filename);
+
+			if (existed) {
+				redirectAttributes.addFlashAttribute("message", "Delete the image successfully: " + filename);
+			} else {
+				redirectAttributes.addFlashAttribute("message", "The image does not exist!");
+			}
+		} catch (Exception e) {
+			redirectAttributes.addFlashAttribute("message",
+					"Could not delete the image: " + filename + ". Error: " + e.getMessage());
+		}
+
+		return "redirect:/admin/images?id=" + id;
 	}
 
 	@RequestMapping(value = "/saveImage", method = RequestMethod.POST)
-	public String saveImage(@RequestParam(value = "mainImg", required = false) String nameImg, HttpSession session,
-			@ModelAttribute("uploadedFiles") List<TempImages> upLoadFile, Model model,
-			RedirectAttributes redirectAttributes) {
+	public String saveImage(@RequestParam(value = "mainImg", required = false) String nameImg,RedirectAttributes redirectAttributes, @RequestParam("id") int id) throws IOException {
 		String uploadDir = "src/main/resources/static/images/";
-		List<TempImages> currentImageList = (List<TempImages>) session.getAttribute("imgList");
-		Product findProduct = (Product) session.getAttribute("Product");
-		model.addAttribute("findProduct", findProduct);
-		if (currentImageList != null) {
-			for (TempImages img : currentImageList) {
-				try {
-					String fileName = img.getFileName();
-					byte[] fileData = img.getData();
-					Integer mainImg;
-					if (nameImg != null) {
-						if (fileName.equals(nameImg)) {
-							mainImg = 1;
-						} else {
-							mainImg = 0;
-						}
+		List<ImageInfo> imageInfos = storageService.loadAll().map(imageData -> {
+			if (imageData != null && imageData.getData() != null) {
+				String filename = imageData.getFilename();
+				String url = MvcUriComponentsBuilder
+						.fromMethodName(ProductController.class, "getImage", imageData.getFilename()).build()
+						.toString();
+				byte[] data = imageData.getData();
+				return new ImageInfo(filename, url, data);
+			}
+			return null;
+		}).collect(Collectors.toList());
+		System.out.println("mainImg:" +nameImg);
+		for (ImageInfo img : imageInfos) {
+			if (img != null && img.getData() != null) {
+				Integer mainImg;
+				if (nameImg != null) {
+					if (img.getName().equals(nameImg)) {
+						mainImg = 1;
 					} else {
 						mainImg = 0;
 					}
-					System.out.println("name:" + fileName);
-					System.out.println("PATH:" + Paths.get(uploadDir + fileName));
-					Files.write(Paths.get(uploadDir + fileName), fileData);
-					imgRepository.insert(findProduct.getIdProduct(), mainImg, fileName);
-					System.out.println("Thanh cong");
-					session.removeAttribute("imgList");
-				} catch (IOException e) {
-					// Xử lý ngoại lệ nếu cần
+				} else {
+					mainImg = 0;
 				}
+				imgRepository.insert(id, mainImg, img.getName());
+				Files.write(Paths.get(uploadDir + img.getName()), img.getData());
 			}
 		}
 
-		redirectAttributes.addAttribute("id", findProduct.getIdProduct());
-		return "redirect:/admin/images";
+		// Sau khi đã lưu xong tất cả các hình ảnh, bạn có thể gọi deleteAll()
+		storageService.deleteAllFilesInRoot();
+
+		return "redirect:/admin/images?id=" + id;
 	}
 
 }

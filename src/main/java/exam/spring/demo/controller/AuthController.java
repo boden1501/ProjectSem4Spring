@@ -25,7 +25,7 @@ public class AuthController {
 	
 	@RequestMapping("/login")
 	public String login(HttpServletRequest request) {
-		Object acc = request.getSession().getAttribute("myacc");
+		Object acc = request.getSession().getAttribute("usrList");
 		
 		if (acc != null) {
 			return "redirect:/";
@@ -41,19 +41,18 @@ public class AuthController {
 		for(User usr: dataList) {
 			if(username.equals(usr.getUsername())&&password.equals(usr.getPassword())){
 				System.out.println("name:" +usr.getName());
-				request.getSession().setAttribute("myacc", username);
-				session.setAttribute("nameUsr", usr.getName());
-				session.setAttribute("usrList", usr);
+				System.out.println("name:" +usr.getAvatar());
+				request.getSession().setAttribute("usrList", usr);
 				return "redirect:/";
 			}
 			
 		}
-		return "redirect:/";
+		return "redirect:/auth/login";
 		
 	}
 	@RequestMapping(value = "/chklogout", method = RequestMethod.GET)
 	public String logoutCHK(Model model, HttpServletRequest request) {
-		request.getSession().removeAttribute("myacc");
+		request.getSession().removeAttribute("usrList");
 		return "redirect:/";
 	}
 	@GetMapping("/register")

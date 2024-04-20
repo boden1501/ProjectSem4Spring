@@ -64,12 +64,11 @@
 		<div th:replace="~{common/_layoutFormFooter}"></div>
 		<div class="btn-group" role ="group" arial-label="Basic example"
 		     th:if = "${totalPages != null && totalPages >0}">
-		     <!-- thymeleaf loop de tao link cho moi trang -->>
+		     <!-- thymeleaf loop de tao link cho moi trang -->
 		     <a th:each="pageNum : ${#numbers.sequence(1, totalPages)}"
 		        th:href="@{/admin/viewAccount(page=${pageNum})}" th:text="${pageNum}"
 		        class="btn btn-outline-secondary" ></a>
 		</div>
-		<button>save</button>
 		<div th:replace="~{common/_layoutFooter}"></div>
 </body>
 
