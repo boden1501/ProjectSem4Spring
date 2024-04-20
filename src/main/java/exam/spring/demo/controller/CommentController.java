@@ -12,6 +12,7 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import exam.spring.demo.model.Comment;
 import exam.spring.demo.model.Product;
+import exam.spring.demo.model.User;
 import exam.spring.demo.repositories.CommentRepository;
 import exam.spring.demo.repositories.ProductRepository;
 
@@ -22,16 +23,34 @@ public class CommentController {
 	ProductRepository pro;
 	@Autowired 
 	CommentRepository com;
+
 	@RequestMapping(value = "/comments", method= RequestMethod.GET)
-	public String index(@RequestParam("id") int id,Model model,RedirectAttributes redirectAttributes) {
-		System.out.println("id:"+id);
+	public String admincomments (@RequestParam("id") int id,Model model, @RequestParam(defaultValue ="0") int page,
+			@RequestParam(defaultValue="10") int size,RedirectAttributes redirectAttributes) {
 		Product productList=pro.findById(id);
-		List<Comment> commentlist =com.findById(id);
-		model.addAttribute("commentlist", commentlist);
 		model.addAttribute("productList",productList);
-		System.out.println("size:"+commentlist.size());
-		redirectAttributes.addAttribute("id", id);
-		return "ad_layout/admincomments";
+		// tinh toan offseet diua trenn trang va kich thuoc trang 
+		    int offset = page * size ;
+			// lay danh sach cac muc tu repository
+		    List<Comment> dataList = com.findAll(id,offset, size);
+		    System.out.println("size: "+dataList.size());
+		// lay tong so luong danh muc trong co so du lieu de tinh toan phann trang
+		    int totalRows = com.getToalRows();
+		// tinh tonng so trang dua tren so luong danh muc va kich thuoc trang 
+		    int totalPages = (int) Math.ceil((double) totalRows / size);
+		// truyen danh sach, tong so luong danh muc, so trang hien tai va tong so trang vao model
+		    int row = 0;
+		    if (page >1) {
+		    	row = offset -size;
+		    }
+		    model.addAttribute("datalist",dataList);
+		    model.addAttribute("row", row);
+		    model.addAttribute("totalRows", totalRows);
+		    model.addAttribute("totalPages", totalPages);
+		    model.addAttribute("currentPages", page);
+		    redirectAttributes.addAttribute("id", id);
+		    return "ad_layout/admincomments";
+		    
 	}
 	@RequestMapping(value = "/commentDelete", method = RequestMethod.DELETE)
 	public String delete (@RequestParam("btn") int idcmt,@RequestParam("btnid") int id,Model model,RedirectAttributes redirectAttributes){
@@ -40,7 +59,7 @@ public class CommentController {
 		redirectAttributes.addAttribute("id", id);
 		return "redirect:/admin/comments";
 	}
+	
 }
-
 
 

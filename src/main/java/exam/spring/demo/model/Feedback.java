@@ -2,7 +2,7 @@ package exam.spring.demo.model;
 
 public class Feedback {
 private int idFeedback;
-private String nameUser;
+private int nameUser;
 private String email;
 private String detail;
 private int active;
@@ -16,8 +16,8 @@ public void setIdFeedback(int idFeedback) {
 public String getNameUser() {
 	return nameUser;
 }
-public void setNameUser(String nameUser) {
-	this.nameUser = nameUser;
+public void setNameUser(int i) {
+	this.nameUser = i;
 }
 public int getActive() {
 	return active;

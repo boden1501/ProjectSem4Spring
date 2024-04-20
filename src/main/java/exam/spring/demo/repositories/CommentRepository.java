@@ -32,20 +32,20 @@ public class CommentRepository {
     
     
     public List<Comment> findComments(){
-    	return db.query("SELECT *  FROM comment", new CommentRowMapper());
+    	return db.query("SELECT *  FROM comment c join member m on c.idUser=m.idUser ", new CommentRowMapper());
     }
     
-    public List<Comment> finAll(int offset, int size){
+    public List<Comment> findAll(int id,int offset, int size ){
     	int start=0;
     	if(offset>size) {
     		start=offset-size;
     	}
-    	return db.query("SELECT * FROM comment LIMIT?,?", new Object[] {},
+    	return db.query("SELECT * FROM comment c join member m on c.idUser=m.idUser where c.idProduct=? LIMIT ?,? ", new Object[] {id, start, size },
     			new CommentRowMapper());
     }
     
     public int getToalRows() {
-    	return db.queryForObject("SELECT COUNT (*) FROM brand", Integer.class);
+    	return db.queryForObject("SELECT COUNT(*) FROM comment", Integer.class);
     }
     
     public List<Comment> findById(int id) {
