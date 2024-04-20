@@ -78,6 +78,7 @@ public class CheckoutController {
 	    	    System.out.println("discount:" +discount);
 	    	    model.addAttribute("discount",discount);
 	    	    model.addAttribute("totalCart",formattedTotal);
+	    	    break;
 	    	}
 	    }
 	    

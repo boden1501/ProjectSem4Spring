@@ -60,11 +60,23 @@ public class ClientController {
 	public String product(Model model) {
 		List<Product> proList = proRepository.findProductAll();
 		List<Image> imgList = imgRepository.findImgAll();
+		System.out.println("size: "+proList.size()+", "+imgList.size());
+		for(Product pro:proList) {
+			
+			for(Image img:imgList) {
+				if(pro.getIdProduct()== img.getIdProduct()&&img.getMain()!=0) {
+					pro.setImg(img.getImage());
+					System.out.println("img:"+pro.getImg());
+					model.addAttribute("proList", proList);
+				}
+				
+			}			
+		}
 		List<Category> cateList = cateRepository.findCategoryAll();
 		List<Brand> brandList = brandRepository.findBrandAll();
 		model.addAttribute("cateList", cateList);
 		model.addAttribute("brandList", brandList);
-		model.addAttribute("proList", proList);
+		
 		model.addAttribute("imgList", imgList);
 		return "client_layout/productClient";
 	}

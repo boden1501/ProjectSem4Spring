@@ -48,7 +48,10 @@ public class ProductRepository {
 
 		return db.query("SELECT * FROM product p join brand b on p.idBrand=b.idBrand ", new ProductRowMapper());
 	}
-
+//	public List<Product> findProductIMGAll() {
+//
+//		return db.query("SELECT * FROM product p join brand b on p.idBrand=b.idBrand join image i on i.idProduct=p.idProduct", new ProductRowMapper());
+//	}
 	public List<Product> findAll(int offset, int size) {
 		int start = 0;
 		if (offset > size) {

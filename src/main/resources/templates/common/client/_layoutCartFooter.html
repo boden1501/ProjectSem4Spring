@@ -21,8 +21,8 @@
 			<td><input type="number" th:value="${cart.Quantity}" /></td>
 			<td th:text="${cart.priceProduct}"></td>
 			<td></td>
-			<td><input type="hidden" th:value="${cart.idCart}" name="idCart">
-				<button type="submit">x</button></td>
+			<td>
+				<button type="submit" th:value="${cart.idCart}" name="idCart">x</button></td>
 
 		</tr>
 
