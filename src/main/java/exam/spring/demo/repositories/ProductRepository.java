@@ -39,6 +39,7 @@ public class ProductRepository {
 		        item.setActiveProduct(rs.getInt(Product.active_product));
 		        item.setDetail(rs.getString(Product.detail_product));
 		        item.setNameBrand(rs.getString(Brand.nameBrand));
+		        item.setPriceTemp(rs.getLong(Product.price_product));
 		        return item;
 		    }
 
@@ -79,7 +80,10 @@ public class ProductRepository {
 					 product.getPriceProduct(), product.getQuantityProduct(),
 						product.getActiveProduct(), product.getDetail() });
 	}
-
+	public int updateProduct(Product product,int idProduct) {
+        return db.update("update product set Name=?,idBrand=?,idCategory=?,Price=?,Quantity=?,Active=?,Detail=? where idProduct = ?",
+                new Object[] { product.getNameProduct(),product.getIdBrand(),product.getIdCategory(),product.getPriceTemp(),product.getQuantityProduct(),product.getActiveProduct(),product.getDetail(),idProduct});
+    }
     public int update(int idDiscount,int idProduct) {
         return db.update("update product set idDiscount=? where idProduct = ?",
                 new Object[] { idDiscount,idProduct});

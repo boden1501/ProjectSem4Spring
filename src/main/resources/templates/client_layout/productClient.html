@@ -16,43 +16,52 @@
 				<b></b> <span><i></i></span> <b class="line"></b>
 			</div>
 		</div>
-		<div class=" con-w3l agileinf">
-			<div class="col-md-3 pro-1" th:each="product:${proList}">
-				<div class="col-m" >
-					<a href="#" data-toggle="modal" data-target="#myModal1"
-						class="offer-img"> <img th:src="@{'/images/'+${product.img}}"
-						class="img-responsive" alt="" >
-					</a>
-					<div class="mid-1">
-						<div class="women">
-							<h6>
-								<a th:href="@{/product/detail(id=${product.idProduct})}"
-									th:text="${product.nameProduct}">Wheat</a>
-							</h6>
-						</div>
-						<div class="mid-2">
-							<p>
-								<!-- $<label>7.00</label> -->
-								<em class="item_price" th:text="${product.priceProduct}"></em>
-							</p>
-							<div class="block">
-								<div class="starbox small ghosting"></div>
+		<form th:action="@{/product/addCart}" method="post">
+			<input type="hidden" name="quantity" value="1"/>
+			<div class=" con-w3l agileinf">
+				<div class="col-md-3 pro-1" th:each="product:${proList}">
+					<div class="col-m">
+						<a href="#" data-toggle="modal" data-target="#myModal1"
+							class="offer-img"> <img th:src="@{'/images/'+${product.img}}"
+							class="img-responsive" alt="">
+						</a>
+						<div class="mid-1">
+							<div class="women">
+								<h6>
+									<a th:href="@{/product/detail(id=${product.idProduct})}"
+										th:text="${product.nameProduct}">Wheat</a>
+								</h6>
 							</div>
-							<div class="clearfix"></div>
-						</div>
-						<div class="add">
-							<button class="btn btn-danger my-cart-btn my-cart-b" data-id="24"
-								data-name="Wheat" data-summary="summary 24" data-price="6.00"
-								data-quantity="1" data-image="images/of24.png">Add to
-								Cart</button>
+							<div class="mid-2">
+								<p>
+									<!-- $<label>7.00</label> -->
+									<em class="item_price" th:text="${product.priceProduct}"></em>
+								</p>
+								<div class="block">
+									<div class="starbox small ghosting"></div>
+								</div>
+								<div class="clearfix"></div>
+							</div>
+							<div class="add">
+								<button class="btn btn-danger my-cart-btn my-cart-b"
+									data-id="24" data-name="Wheat" data-summary="summary 24"
+									data-price="6.00" data-quantity="1"
+									data-image="images/of24.png" th:value="${product.idProduct}"
+									name="id">Add to Cart</button>
+							</div>
 						</div>
 					</div>
 				</div>
 			</div>
-		</div>
+		</form>
 	</div>
 	<!-- </div> -->
 	<div th:replace="~{common/client/_layoutFooterClient}"></div>
+	<div th:replace="~{common/client/_layoutCartHeader}"></div>
+	<form th:action="@{/product/deleteProduct}" th:method="DELETE">
+
+		<!-- <input type="hidden" th:value="${findProduct.idProduct}" name="id"> -->
+		<div th:replace="~{common/client/_layoutCartFooter}"></div>
 </body>
 </html>
 <div th:replace="~{common/client/_script}"></div>

@@ -61,7 +61,21 @@ public class ProductController {
 		model.addAttribute("brandList", brandList);
 		return "ad_layout/createAdmin";
 	}
-
+	@RequestMapping(value = "/updateProduct",method = RequestMethod.GET)
+	public String updateProduct(Model model,@RequestParam("id") int id,RedirectAttributes redirectAttributes) {
+		Product product = productRepository.findById(id);
+		List<Category> categoryList = cateRepository.findCategoryAll();
+		List<Brand> brandList = brandRepository.findBrandAll();
+		model.addAttribute("categoryList", categoryList);
+		model.addAttribute("brandList", brandList);
+		model.addAttribute("product",product);
+		return "ad_layout/createAdmin";
+	}
+	@RequestMapping(value = "/CHKupdateProduct",method = RequestMethod.PUT)
+	public String chkUpdate(@RequestParam("id") int id,@Validated Product item) {
+		productRepository.updateProduct(item, id);
+		return "redirect:/admin/updateProduct?id="+id;
+	}
 	@RequestMapping(value = "/findProduct", method = RequestMethod.POST)
 	public String findProduct(@RequestParam("txtSearch") String txtSearch, Model model) {
 		List<Product> productList = productRepository.findByName(txtSearch);

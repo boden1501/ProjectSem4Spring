@@ -57,32 +57,47 @@ public class ClientController {
 	}
 
 	@RequestMapping(value = "/product", method = RequestMethod.GET)
-	public String product(Model model) {
+	public String product(Model model, HttpSession session,HttpServletRequest request) {
+		User usr = (User) session.getAttribute("usrList");
+
 		List<Product> proList = proRepository.findProductAll();
 		List<Image> imgList = imgRepository.findImgAll();
-		System.out.println("size: "+proList.size()+", "+imgList.size());
-		for(Product pro:proList) {
-			
-			for(Image img:imgList) {
-				if(pro.getIdProduct()== img.getIdProduct()&&img.getMain()!=0) {
+		System.out.println("size: " + proList.size() + ", " + imgList.size());
+		for (Product pro : proList) {
+
+			for (Image img : imgList) {
+				if (pro.getIdProduct() == img.getIdProduct() && img.getMain() != 0) {
 					pro.setImg(img.getImage());
-					System.out.println("img:"+pro.getImg());
+					System.out.println("img:" + pro.getImg());
 					model.addAttribute("proList", proList);
 				}
-				
-			}			
+
+			}
 		}
 		List<Category> cateList = cateRepository.findCategoryAll();
 		List<Brand> brandList = brandRepository.findBrandAll();
 		model.addAttribute("cateList", cateList);
 		model.addAttribute("brandList", brandList);
-		
+
 		model.addAttribute("imgList", imgList);
-		return "client_layout/productClient";
+		if (usr == null) {
+			model.addAttribute("message", "Please login!");
+			return "client_layout/productClient";
+		}
+		else {
+			List<Cart> cartList = cartRepository.loadAllByID(usr.getId());
+			int countCart = cartRepository.getNum(usr.getId());
+			if (countCart == 0) {
+				model.addAttribute("message", "Your cart is currently empty!");
+			}
+			model.addAttribute("cartList", cartList);
+			model.addAttribute("countCart", countCart);
+			return "client_layout/productClient";
+		}
 	}
 
 	@RequestMapping(value = "/product/detail", method = RequestMethod.GET)
-	public String productDetail(@RequestParam("id") int id, Model model, HttpSession session) {
+	public String productDetail(@RequestParam("id") int id, Model model, HttpSession session,HttpServletRequest request) {
 		User usr = (User) session.getAttribute("usrList");
 		if (usr == null) {
 			Product findProduct = proRepository.findById(id);
@@ -93,7 +108,8 @@ public class ClientController {
 			model.addAttribute("proList", proList);
 			model.addAttribute("imgList", imgList);
 			model.addAttribute("imgProduct", imgProduct);
-			
+			model.addAttribute("message", "Please login!");
+
 		} else {
 			Product findProduct = proRepository.findById(id);
 			model.addAttribute("findProduct", findProduct);
@@ -103,12 +119,14 @@ public class ClientController {
 			model.addAttribute("proList", proList);
 			model.addAttribute("imgList", imgList);
 			model.addAttribute("imgProduct", imgProduct);
-			
+
 			List<Cart> cartList = cartRepository.loadAllByID(usr.getId());
-			int countCart=cartRepository.getNum(usr.getId());
-			if(countCart==0) {model.addAttribute("message", "Your cart is currently empty!");}
+			int countCart = cartRepository.getNum(usr.getId());
+			if (countCart == 0) {
+				model.addAttribute("message", "Your cart is currently empty!");
+			}
 			model.addAttribute("cartList", cartList);
-			model.addAttribute("countCart",countCart);
+			model.addAttribute("countCart", countCart);
 
 		}
 		return "client_layout/detail";
@@ -134,18 +152,24 @@ public class ClientController {
 			System.out.println("Vinh1");
 			cartRepository.insert(id, quantity, usr.getId());
 			return "redirect:/product/detail?id=" + id;
-	
+
 		} else {
 			System.out.println("Vinh");
 			cartRepository.insert(id, quantity, usr.getId());
-			
+
 		}
 		return "redirect:/product/detail?id=" + id;
 	}
-	@RequestMapping(value="/product/delete",method=RequestMethod.DELETE)
-	public String deleteCart(@RequestParam("id") int id,@RequestParam("idCart") int idCart) {
+
+	@RequestMapping(value = "/product/delete", method = RequestMethod.DELETE)
+	public String deleteCart(@RequestParam("id") int id, @RequestParam("idCart") int idCart) {
 		cartRepository.deleteByID(idCart);
-		return "redirect:/product/detail?id="+id;
+		return "redirect:/product/detail?id=" + id;
+	}
+	@RequestMapping(value = "/product/deleteProduct", method = RequestMethod.DELETE)
+	public String deletePro( @RequestParam("idCart") int idCart) {
+		cartRepository.deleteByID(idCart);
+		return "redirect:/product";
 	}
 	@RequestMapping(value = "/profile", method = RequestMethod.GET)
 	public String profile(HttpSession session, Model model) {
