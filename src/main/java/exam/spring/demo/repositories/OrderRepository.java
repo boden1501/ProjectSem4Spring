@@ -1,57 +1,11 @@
 package exam.spring.demo.repositories;
 
-<<<<<<< HEAD
-=======
 import java.sql.ResultSet;
 import java.sql.SQLException;
->>>>>>> 8e1831f6aa0c6aa29b6929a2a27c0fb2f97a2274
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
-<<<<<<< HEAD
-
-import exam.spring.demo.model.Order;
-
-public class OrderRepository {
-	@Autowired
-	private JdbcTemplate jdbcTemplate;
-	
-	public List<Order> findByUserName(String UserName) {
-		String sql ="SELECT * FROM orders WHERE user_name =?";
-		return jdbcTemplate.query(sql, new Object[]{findByUserName(null)}, (rs, rowNum)
-				new Order(
-						rs.getLong("id"),
-						rs.getString("user_name"),
-						rs.getString("product_name"),
-						rs.getString("status")
-						));
-	    }
-	}
-	
-
-//import org.springframework.beans.factory.annotation.Autowired;
-//import org.springframework.jdbc.core.JdbcTemplate;
-//import org.springframework.stereotype.Repository;
-//import java.util.List;
-//
-//@Repository
-//public class OrderRepository {
-//    @Autowired
-//    private JdbcTemplate jdbcTemplate;
-//
-//    public List<Order> findByCustomerName(String customerName) {
-//        String sql = "SELECT * FROM orders WHERE customer_name = ?";
-//        return jdbcTemplate.query(sql, new Object[]{customerName}, (rs, rowNum) ->
-//                new Order(
-//                        rs.getLong("id"),
-//                        rs.getString("customer_name"),
-//                        rs.getString("product_name"),
-//                        rs.getString("status")
-//                ));
-//    }
-//}
-=======
 import org.springframework.jdbc.core.RowMapper;
 import org.springframework.stereotype.Repository;
 
@@ -99,4 +53,3 @@ public class OrderRepository {
 	 * Checkout.getId_Checkout()}); }
 	 */
 }
->>>>>>> 8e1831f6aa0c6aa29b6929a2a27c0fb2f97a2274

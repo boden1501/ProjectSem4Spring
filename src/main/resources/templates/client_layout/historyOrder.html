@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+<div th:replace="~{common/client/_styleClient}"></div>
+<meta charset="ISO-8859-1">
+<title>History Order</title>
+<style type="text/css">
+@import url('https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css');
+body {
+  background: #eee;
+  font-family: Assistant, sans-serif;
+}
+
+.cell-1 {
+  border-collapse: separate;
+  border-spacing: 0 4em;
+  background: #fff;
+  border-bottom: 5px solid transparent;
+  /*background-color: gold;*/
+  background-clip: padding-box;
+}
+
+thead {
+  background: #dddcdc;
+}
+
+.toggle-btn {
+  width: 40px;
+  height: 21px;
+  background: grey;
+  border-radius: 50px;
+  padding: 3px;
+  cursor: pointer;
+  -webkit-transition: all 0.3s 0.1s ease-in-out;
+  -moz-transition: all 0.3s 0.1s ease-in-out;
+  -o-transition: all 0.3s 0.1s ease-in-out;
+  transition: all 0.3s 0.1s ease-in-out;
+}
+
+.toggle-btn > .inner-circle {
+  width: 15px;
+  height: 15px;
+  background: #fff;
+  border-radius: 50%;
+  -webkit-transition: all 0.3s 0.1s ease-in-out;
+  -moz-transition: all 0.3s 0.1s ease-in-out;
+  -o-transition: all 0.3s 0.1s ease-in-out;
+  transition: all 0.3s 0.1s ease-in-out;
+}
+
+.toggle-btn.active {
+  background: blue !important;
+}
+
+.toggle-btn.active > .inner-circle {
+  margin-left: 19px;
+}
+</style>
+</head>
+<body>
+<div th:replace="~{common/client/_layoutHeaderClient}"></div>
+<form th:action="@{/admin/search}" method="post">
+			<input type="search" name="nameSearch"></input><!-- nhap tim kiem -->
+			<!--  <button type="submit">Search</button>-->
+	</form>
+<div th:replace="~{common/_layoutFormHeader}"></div>
+	<tbody>
+	
+
+		<tr th:each="order : ${orderList}" th:if="${order.role != 1}">
+			<form th:action="@{/common/client/updateOrder}" method="post">
+				<!-- Thông tin của mỗi user -->
+				<td th:text="${order.id}"></td>
+				<td th:text="${order.name}"></td>
+				<td th:text="${order.phone}"></td>
+				<td th:text="${order.address}"></td>
+				<td th:text="${order.email}"></td>
+				<td><input type="checkbox" class="checkboxForm"
+					th:checked="${order.active == 0}" disabled></td>
+				<td class="text-left">
+					<!-- Hidden input chứa ID của user -->
+					 <input type="hidden"
+					th:name="id" th:value="${order.id}" /> <!-- Nút "Cam" --> <input
+					type="submit" value="inactive" th:if="${order.active==0}" /> <!-- Nút "Cho Phep" -->
+					<input type="submit" value="Cho Phep" th:if="${order.active==1}" />
+					<!-- Hidden input field để chỉ rõ active value --> <input
+					type="hidden" name="active" th:value="${order.active == 0 ? 1 : 0}" />
+					<!-- Hidden input field để chỉ rõ phương thức PUT --> <input
+					type="hidden" name="_method" value="PUT" />
+				</td>
+
+				<!-- Hidden input field để chỉ rõ phương thức PUT -->
+				<input type="hidden" name="_method" value="PUT" />
+			</form>
+		</tr>
+	<div th:replace="~{common/client/_layoutFooterClient}"></div>
+</body>
+</html>
+
