@@ -1,0 +1,40 @@
+
+<script
+	src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js">
+	
+</script>
+<div class="card">
+	<div class="row">
+		<div class="col-10">
+			<div class="comment-box ml-2">
+				<form th:action="@{/chkAddCommnent}" method="post">
+				<input type="hidden" th:value="${findProduct.idProduct}" name="id">
+					<h4>Add a comment</h4>
+					<div class="comment-area">
+						<textarea class="form-control" placeholder="what is your view?"
+							rows="4" name="content"></textarea>
+					</div>
+					<div class="comment-btns mt-2">
+						<div class="row">
+							<div class="col-6" style="margin: 10px;">
+								<div class="pull-right">
+									<button class="btn btn-success send btn-sm">
+										Send <i class="fa fa-long-arrow-right ml-1"></i>
+									</button>
+
+								</div>
+
+							</div>
+
+						</div>
+
+					</div>
+				</form>
+			</div>
+
+		</div>
+
+
+	</div>
+
+</div>

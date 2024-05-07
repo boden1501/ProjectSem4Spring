@@ -16,29 +16,48 @@
 				<b></b> <span><i></i></span> <b class="line"></b>
 			</div>
 		</div>
+		<form th:action="@{/products}" method="get">
+			<label for="sortBy">Sort By:</label>
+			<select name="sortBy" id="sortBy">
+					<option value="priceLowToHigh">Price Low to High</option>
+					<option value="priceHighToLow">Price High to Low</option>
+					<option value="nameAZ">Name A-Z</option>
+					<option value="nameZA">Name Z-A</option>
+
+			</select>
+
+
+			<button type="submit">Apply Filters</button>
+	</form>
+		
 		<form th:action="@{/product/addCart}" method="post">
 			<input type="hidden" name="quantity" value="1"/>
 			<div class=" con-w3l agileinf">
-				<div class="col-md-3 pro-1" th:each="product:${proList}">
+				<div class="col-md-3 pro-1" th:each="product:${proList}" >
 					<div class="col-m">
-						<a href="#" data-toggle="modal" data-target="#myModal1"
-							class="offer-img"> <img th:src="@{'/images/'+${product.img}}"
-							class="img-responsive" alt="">
-						</a>
-						<div class="mid-1">
-							<div class="women">
-								<h6>
+					<div class="women" style="margin-bottom: 10px;">
+								<h2 style="font-size: 16px;     text-align: center;">
 									<a th:href="@{/product/detail(id=${product.idProduct})}"
 										th:text="${product.nameProduct}">Wheat</a>
-								</h6>
+								</h2>
 							</div>
+						<a th:href="@{/product/detail(id=${product.idProduct})}" data-toggle="modal" data-target="#myModal1"
+							class="offer-img"> <img style="min-height: 150px;" th:src="@{'/images/'+${product.img}}"
+							class="img-responsive"  alt="">
+						</a>
+						<div class="mid-1">
+							
 							<div class="mid-2">
-								<p>
-									<!-- $<label>7.00</label> -->
+								<p th:if="${product.priceDiscount}==null">
+									<!-- <label>7.00</label> -->
 									<em class="item_price" th:text="${product.priceProduct}"></em>
 								</p>
+								<p th:if="${product.priceDiscount}!=null">
+									<label th:text="${product.priceProduct}">7.00</label>
+									<em class="item_price" th:text="${product.priceDiscount}"></em>
+								</p>
 								<div class="block">
-									<div class="starbox small ghosting"></div>
+									<div class="starbox small ghosting" th:data-start-value="${product.AvgVote}"></div>
 								</div>
 								<div class="clearfix"></div>
 							</div>

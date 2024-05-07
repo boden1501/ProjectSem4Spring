@@ -30,6 +30,7 @@ public class OrderRepository {
             item.setEmailUser(rs.getString("emailUser"));
             item.setAddressUser(rs.getString("addressUser"));
             item.setActive(rs.getInt("active"));
+            item.setIdUser(rs.getInt("idUser"));
             return item;
         }
     }
@@ -38,18 +39,20 @@ public class OrderRepository {
         return db.query("SELECT * FROM `order` ", new CheckoutRowMapper());
     }
 
-
-    
-	public int insert(String idOrder, String DateCreate, CheckoutTemp chkTemp, int active) {
-	    return db.update("INSERT INTO `order` (idOrder, DateCreate, TotalPrice, PriceAfterDiscount, DiscountPrice, nameUser, phoneUser, addressUser, emailUser, active) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)",
-	            new Object[] { idOrder, DateCreate, chkTemp.getSubTotalPrice(), chkTemp.getTotalPrice(), chkTemp.getDiscountPrice(), chkTemp.getNameUser(), chkTemp.getPhoneUser(), chkTemp.getAddressUser(), chkTemp.getEmailUser(), active});
+	public List<Checkout> findByName(int id,int offset, int size) {
+		int start=0;
+    	if(offset>size) {
+    		start=offset-size;
+    	}
+        return db.query("SELECT * FROM `order` where idUSer=? order by DateCreate desc LIMIT ?, ?", new CheckoutRowMapper(),new Object[] {id,start,size});
+    }
+	public int getTotalRows(int id) {
+        return db.queryForObject("SELECT COUNT(*) FROM `order` where idUSer=?", Integer.class,new Object[] {id});
+    }
+	public int insert(String idOrder,int idUser ,String DateCreate, CheckoutTemp chkTemp, int active) {
+	    return db.update("INSERT INTO `order` (idOrder,idUser ,DateCreate, TotalPrice, PriceAfterDiscount, DiscountPrice, nameUser, phoneUser, addressUser, emailUser, active) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)",
+	            new Object[] { idOrder,idUser ,DateCreate, chkTemp.getSubTotalPrice(), chkTemp.getTotalPrice(), chkTemp.getDiscountPrice(), chkTemp.getNameUser(), chkTemp.getPhoneUser(), chkTemp.getAddressUser(), chkTemp.getEmailUser(), active});
 	}
 
-    
-	/*
-	 * public int update(Checkout Checkout) { return db.
-	 * update("update Checkout set nameCheckout = ?, active = ? where idCheckout = ?"
-	 * , new Object[] { Checkout.getName_Checkout(), Checkout.getActive_Checkout(),
-	 * Checkout.getId_Checkout()}); }
-	 */
+
 }

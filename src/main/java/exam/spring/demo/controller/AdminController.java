@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import exam.spring.demo.model.Category;
 import exam.spring.demo.model.Discount;
@@ -138,12 +139,20 @@ public class AdminController {
 		return "ad_layout/categoryAdmin";
 	}
 
-	@CrossOrigin
-	@RequestMapping(value = "/update", method = RequestMethod.PUT)
-	public String updateCategory(@Validated Category item) {
 
-		System.out.println("ID:" + item.getId());
-		System.out.println("Name:" + item.getName());
+	@RequestMapping(value = "/update", method = RequestMethod.PUT)
+	public String updateCategory(RedirectAttributes redirectAttributes,@Validated Category item) {
+		List<Category> itemList=cateRepository.findCategoryAll();
+		for(Category cate:itemList) {
+			String name = item.getName().trim();
+			
+			if(cate.getName().equalsIgnoreCase(name)) {
+				System.out.println("Hello");
+				redirectAttributes.addFlashAttribute("message","Name already exixts!");
+				return "redirect:/admin/category";
+			}
+		}
+		System.out.println("VInh");
 		cateRepository.update(item);
 
 		return "redirect:/admin/category";
@@ -151,15 +160,15 @@ public class AdminController {
 
 	@CrossOrigin
 	@RequestMapping(value = "/submitCategory", method = RequestMethod.POST)
-	public String saveCategory(@Validated Category item, Model model) {
+	public String saveCategory(@Validated Category item, Model model,RedirectAttributes redirectAttributes) {
 		try {
 			cateRepository.insert(item);
 			String errorMessage = "Add Successfully.";
-			model.addAttribute("errorMessage", errorMessage);
+			redirectAttributes.addFlashAttribute("success", errorMessage);
 		} catch (DataIntegrityViolationException e) {
 			// Xử lý ngoại lệ khi cột active có giá trị NULL
-			String errorMessage = "An error occurred while saving the category. Please make sure all fields are filled correctly.";
-			model.addAttribute("errorMessage", errorMessage);
+			String errorMessage = "Name already exixts!";
+			redirectAttributes.addFlashAttribute("message", errorMessage);
 		}
 
 		return "redirect:/admin/category";

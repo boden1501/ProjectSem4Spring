@@ -68,11 +68,15 @@
 				</thead>
 				<tbody>
 					<tr th:each="imgList:${listImg}">
-						<td><img style="border-radius: 0%; height: 10%; width: 10%;" th:src="@{'/images/'+${imgList.Image}}"
-							alt="" /></td>
-						<td><input type="checkbox" class="checkboxForm" th:checked="${imgList.main == 1}" disabled></td>
-						<td><!-- <a
-							th:href="@{'/admin/images/delete/' + ${imgList.Image} + '?id=' + ${imgList.idProduct}}">Delete</a> -->
+						<td><img style="border-radius: 0%; height: 10%; width: 10%;"
+							th:src="@{'/images/'+${imgList.Image}}" alt="" /></td>
+						<td><input type="checkbox" class="checkboxForm"
+							onclick="toggleMain(this)" th:checked="${imgList.main == 1}" th:data-img-id="${imgList.idImage}">
+							<input type="hidden" th:value="${imgList.idProduct}" name="ida" />	
+						</td>
+							
+						<td><a
+							th:href="@{'/admin/images/deleteIMG/' + ${imgList.idImage} + '?id=' + ${imgList.idProduct}}">Delete</a>
 						</td>
 					</tr>
 
@@ -81,12 +85,13 @@
 							class="img" th:src="@{${image.url}}" alt="${image.name}"
 							height="60px" /></td>
 						<td><input type="checkbox" name="mainImg"
-							th:value="${image.name}" onclick="toggleMain(this)" th:if="${mainCheck}==null"/></td>
+							class="checkboxForm" th:value="${image.name}"
+							onclick="toggleMain(this)" /></td>
 						<td><a
-							th:href="@{'/admin/images/delete/'+ ${image.name} + '?id=' + ${findProduct.idProduct}}">Delete</a>
-
-						</td>
+							th:href="@{'/admin/images/delete/'+ ${image.name} + '?id=' + ${findProduct.idProduct}}">Delete</a></td>
 					</tr>
+
+
 
 					<div th:replace="~{common/_layoutFormFooter}"></div>
 					<button class="btn btn-primary" type="submit"
@@ -104,24 +109,40 @@
 </html>
 <script>
 	function toggleMain(checkbox) {
-		var isChecked = checkbox.checked;
-		var mainImgInput = document.getElementById("mainImg");
-		mainImgInput.value = isChecked ? 1 : 0;
-	}
+		// Loại bỏ checked từ tất cả các checkbox trong cùng một nhóm
+		var checkboxes = document.querySelectorAll('.checkboxForm');
+		checkboxes.forEach(function(checkbox) {
+			checkbox.checked = false;
+		});
 
-	$("input:checkbox").on('click', function() {
-		// in the handler, 'this' refers to the box clicked on
-		var $box = $(this);
-		if ($box.is(":checked")) {
-			// the name of the box is retrieved using the .attr() method
-			// as it is assumed and expected to be immutable
-			var group = "input:checkbox[name='" + $box.attr("name") + "']";
-			// the checked state of the group/box on the other hand will change
-			// and the current value is retrieved using .prop() method
-			$(group).prop("checked", false);
-			$box.prop("checked", true);
-		} else {
-			$box.prop("checked", false);
-		}
-	});
+		// Chỉ đánh dấu checkbox hiện tại là checked
+		checkbox.checked = true;
+	}
+</script>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+<script>
+    $(document).ready(function() {
+        $('.checkboxForm').on('change', function() {
+            var imgId = $(this).data('img-id');
+            var isChecked = $(this).prop('checked');
+            var productId = parseInt($(this).siblings('[name="ida"]').val()); // Lấy giá trị của input hidden
+			console.log(productId);
+            // Gửi yêu cầu Ajax khi checkbox được thay đổi
+            $.ajax({
+                url: '/admin/images/updateMain',
+                method: 'POST',
+                data: {
+                    imgId: imgId,
+                    isChecked: isChecked,
+                    productId: productId // Gửi giá trị của productId
+                },
+                success: function(response) {
+                    console.log('Trạng thái checked đã được cập nhật thành công!');
+                },
+                error: function(xhr, status, error) {
+                    console.error('Đã xảy ra lỗi: ' + error);
+                }
+            });
+        });
+    });
 </script>

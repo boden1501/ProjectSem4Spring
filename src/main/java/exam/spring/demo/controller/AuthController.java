@@ -22,48 +22,56 @@ import jakarta.servlet.http.HttpSession;
 public class AuthController {
 	@Autowired
 	UserRepository usrRepository;
-	
+
 	@RequestMapping("/login")
 	public String login(HttpServletRequest request) {
 		Object acc = request.getSession().getAttribute("usrList");
-		
 		if (acc != null) {
-			return "redirect:/";
+			return "redirect/:";
 		}
 		return "/auth/login";
 	}
-	
-	@RequestMapping(value = "/chklogin",method= RequestMethod.POST)
-	public String loginCHK(@RequestParam("usr")String username, @RequestParam("pwd")String password,HttpServletRequest request,HttpSession session) {
+
+	@RequestMapping(value = "/chklogin", method = RequestMethod.POST)
+	public String loginCHK(@RequestParam("usr") String username, @RequestParam("pwd") String password,
+			HttpServletRequest request, HttpSession session) {
 		Logger log = Logger.getGlobal();
-		log.info(username+" "+password);
+		log.info(username + " " + password);
 		List<User> dataList = usrRepository.findAll();
-		for(User usr: dataList) {
-			if(username.equals(usr.getUsername())&&password.equals(usr.getPassword())){
-				System.out.println("name:" +usr.getName());
-				System.out.println("name:" +usr.getAvatar());
+		String url = (String) request.getSession().getAttribute("URL");
+		System.out.println("URL:" + url);
+		for (User usr : dataList) {
+			if (username.equals(usr.getUsername()) && password.equals(usr.getPassword())) {
+				System.out.println("name:" + usr.getName());
+				System.out.println("name:" + usr.getAvatar());
 				request.getSession().setAttribute("usrList", usr);
-				return "redirect:/";
+				if (url == null) {
+					return "redirect:/";
+				}
+				else {
+					return "redirect:"+url;
+				}
 			}
-			
+
 		}
 		return "redirect:/auth/login";
-		
+
 	}
+
 	@RequestMapping(value = "/chklogout", method = RequestMethod.GET)
 	public String logoutCHK(Model model, HttpServletRequest request) {
 		request.getSession().removeAttribute("usrList");
 		return "redirect:/";
 	}
+
 	@GetMapping("/register")
 	public String register() {
 		return "/auth/register";
 	}
-	
-	@RequestMapping(value = "/register",method= RequestMethod.POST)
-	public String saveUser(@Validated User user, Model model)
-	{
+
+	@RequestMapping(value = "/register", method = RequestMethod.POST)
+	public String saveUser(@Validated User user, Model model) {
 		usrRepository.registerUser(user);
-		return "redirect:/auth/login"; 
+		return "redirect:/auth/login";
 	}
 }

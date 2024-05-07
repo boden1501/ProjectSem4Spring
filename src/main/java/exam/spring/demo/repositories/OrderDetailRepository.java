@@ -25,13 +25,16 @@ public class OrderDetailRepository {
             item.setIdOrderDetail(rs.getInt("idOrderDetail"));
             item.setIdProduct(rs.getInt("idProduct"));
             item.setQuantity(rs.getInt("quantity"));
+            item.setNameProduct(rs.getString("Name"));
             return item;
         }
     }
 	public List<CheckoutDT> findCheckoutDTAll() {
-        return db.query("SELECT * FROM orderdetail ", new CheckoutDTRowMapper());
+        return db.query("SELECT * FROM orderdetail dt join product p on dt.idProduct=p.idProduct ", new CheckoutDTRowMapper());
     }
-
+	public List<CheckoutDT> findByID(String idOrder) {
+        return db.query("SELECT * FROM orderdetail dt join product p on dt.idProduct=p.idProduct where idOrder=?", new CheckoutDTRowMapper(),new Object[] {idOrder});
+    }
 
     
     public int insert(String idOrder,Cart cart) {

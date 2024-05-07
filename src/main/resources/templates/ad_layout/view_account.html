@@ -42,8 +42,8 @@
 					<!-- Hidden input chứa ID của user -->
 					 <input type="hidden"
 					th:name="id" th:value="${user.id}" /> <!-- Nút "Cam" --> <input
-					type="submit" value="Cam" th:if="${user.active==0}" /> <!-- Nút "Cho Phep" -->
-					<input type="submit" value="Cho Phep" th:if="${user.active==1}" />
+					type="submit" value="Inactive" th:if="${user.active==0}" /> <!-- Nút "Cho Phep" -->
+					<input type="submit" value="Active" th:if="${user.active==1}" />
 					<!-- Hidden input field để chỉ rõ active value --> <input
 					type="hidden" name="active" th:value="${user.active == 0 ? 1 : 0}" />
 					<!-- Hidden input field để chỉ rõ phương thức PUT --> <input

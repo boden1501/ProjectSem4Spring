@@ -56,7 +56,7 @@
 																<label class="form-label" for="billing-name">Name</label>
 																<input type="text" class="form-control"
 																	id="billing-name" placeholder="Enter name"
-																	name="nameUser" required="required">
+																	name="nameUser" required="required" th:value="${session.usrList.name}">
 															</div>
 														</div>
 														<div class="col-lg-4">
@@ -64,7 +64,7 @@
 																<label class="form-label" for="billing-email-address">Email
 																	Address</label> <input type="email" class="form-control"
 																	id="billing-email-address" placeholder="Enter email"
-																	name="emailUser" required="required">
+																	name="emailUser" required="required" th:value="${session.usrList.email}">
 															</div>
 														</div>
 														<div class="col-lg-4">
@@ -72,7 +72,7 @@
 																<label class="form-label" for="billing-phone">Phone</label>
 																<input type="text" class="form-control"
 																	id="billing-phone" placeholder="Enter Phone no."
-																	name="phoneUser" required="required">
+																	name="phoneUser" required="required" th:value="${session.usrList.phone}">
 															</div>
 														</div>
 													</div>
@@ -81,7 +81,7 @@
 														<label class="form-label" for="billing-address">Address</label>
 														<textarea class="form-control" id="billing-address"
 															rows="3" placeholder="Enter full address"
-															name="addressUser" required="required"></textarea>
+															name="addressUser" required="required"  th:text="${session.usrList.address}"></textarea>
 													</div>
 
 													<!-- <div class="row">
@@ -211,7 +211,7 @@
 														</label>
 													</div>
 												</div>
-												<div class="col-lg-3 col-sm-6">
+												<!-- <div class="col-lg-3 col-sm-6">
 													<div>
 														<label class="card-radio-label"> <input
 															type="radio" name="pay-method" id="pay-methodoption3"
@@ -223,7 +223,7 @@
 														</label>
 													</div>
 												</div>
-
+ -->
 
 											</div>
 										</div>

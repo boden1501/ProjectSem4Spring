@@ -39,9 +39,13 @@ public class ImageRepository {
         return db.update("INSERT INTO image (idProduct,main,Image) VALUES (?,?,?)",
                 new Object[] { idProduct,main,Image});
     }
-    
-//    public int update(Image Image) {
-//        return db.update("update Image set nameImage = ?, active = ? where idImage = ?",
-//                new Object[] { Image.getName(), Image.getActive(), Image.getId()});
-//    }
+    public int deleteByID(int idImage) {
+		return db.update("delete from image where idImage=?",new Object[] {idImage});
+	}
+    public int updateMain(int main,int id) {
+    	return db.update("update image set main=? where idImage=?",new Object[] {main,id});
+    }
+    public int update(int main,int idImage,int idProduct) {
+    	return db.update("update image set main=? where idImage!=? and idProduct=?",new Object[] {main,idImage,idProduct});
+    }
 }

@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<title>Order History</title>
+<div th:replace="~{common/client/_styleClient}"></div>
+</head>
+<body>
+	<div th:replace="~{common/client/_layoutHeaderClient}"></div>
+	<div class="banner-top">
+		<div class="container">
+			<h3>Order History</h3>
+			<h4>
+				<a th:href="@{/}">Home</a><label>/</label>Order History
+			</h4>
+			<div class="clearfix"></div>
+		</div>
+	</div>
+
+	<!-- contact -->
+	<div class="check-out">
+		<div class="container">
+			<div class="spec ">
+				<h3>Order History</h3>
+				<div class="ser-t">
+					<b></b> <span><i></i></span> <b class="line"></b>
+				</div>
+			</div>
+
+			<table class="table " th:if="${orderList}!=null">
+				<tr>
+					<th class="t-head head-it ">NO.</th>
+					<th class="t-head head ">ID Order</th>
+					<th class="t-head head">Date</th>
+					<th class="t-head">Price</th>
+					<th class="t-head">Status</th>
+					<th class="t-head">View</th>
+				</tr>
+				<tr class="cross" th:each="order,index:${orderList}">
+					<td class="t-data" th:text="${index.index + 1}+${row}"></td>
+					<td class="t-data" th:text="${order.idOrder}"></td>
+					<td class="t-data" th:text="${order.DateCreate}"></td>
+					<td class="t-data" th:text="${order.totalPrice}"></td>
+					<td class="t-data" style="color: green;"
+						th:text="${order.active == 1 ? 'Paid' : 'Unpaid'}"></td>
+					<td class="t-data"><button class="view-btn"
+							th:data-id="${order.idOrder}">View</button></td>
+
+				</tr>
+
+			</table>
+			<p th:if="${orderList}==null" style="font-size: 30px; color: red; text-align: center;" th:text="${message}"></p>
+			<div class="btn-group" role="group" aria-label="Basic example"
+				th:if="${totalPages != null && totalPages > 1}">
+				<!-- Thymeleaf loop để tạo link cho mỗi trang -->
+				<a th:each="pageNum : ${#numbers.sequence(1, totalPages)}"
+					th:href="@{/orderHistory(page=${pageNum})}" th:text="${pageNum}"
+					class="btn btn-outline-secondary"></a>
+			</div>
+		</div>
+	</div>
+	<div id="orderDetailContainer"></div>
+	<!--quantity-->
+	<div th:replace="~{common/client/_layoutFooterClient}"></div>
+
+	<!-- Modal -->
+	
+
+		<div th:replace="~{common/client/_script}"></div>
+
+		<script>
+			$('.view-btn').click(
+					function() {
+						var idOrder = $(this).data('id');
+						$.ajax({
+							type : "GET",
+							url : "/orderDetail",
+							data : {
+								"idOrder" : idOrder
+							},
+							success : function(response) {
+								// Trích xuất nội dung cụ thể từ phản hồi Ajax
+								console.log(response)
+								$('#orderDetailContainer').html(response);
+								$('#myModal1').modal('show');
+							},
+							error : function(xhr, status, error) {
+								console.error('Đã xảy ra lỗi: ' + error);
+							}
+						});
+					});
+
+			// Xóa nội dung modal body khi modal được đóng
+			$('#myModal').on('hidden.bs.modal', function() {
+				$(this).find('.modal-body').html('');
+			});
+		</script>
+</body>
+</html>

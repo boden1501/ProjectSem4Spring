@@ -5,6 +5,7 @@ public class CheckoutDT {
 	private String idOrder;
 	private int idProduct;
 	private int quantity;
+	private String nameProduct;
 	public int getIdOrderDetail() {
 		return idOrderDetail;
 	}
@@ -28,6 +29,12 @@ public class CheckoutDT {
 	}
 	public void setQuantity(int quantity) {
 		this.quantity = quantity;
+	}
+	public String getNameProduct() {
+		return nameProduct;
+	}
+	public void setNameProduct(String nameProduct) {
+		this.nameProduct = nameProduct;
 	}
 	
 }

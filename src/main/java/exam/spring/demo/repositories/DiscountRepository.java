@@ -44,7 +44,7 @@ public class DiscountRepository {
     }
 	public List<Discount> findDiscountAll() {
     
-        return db.query("SELECT * FROM discount ", new DiscountRowMapper());
+        return db.query("SELECT * FROM discount where active=0", new DiscountRowMapper());
     }
 
 	public List<Discount> findAll(int offset, int size) {
@@ -52,7 +52,7 @@ public class DiscountRepository {
     	if(offset>size) {
     		start=offset-size;
     	}
-        return db.query("SELECT * FROM discount LIMIT ?, ?", new Object[] { start, size },
+        return db.query("SELECT * FROM discount where active=0 LIMIT ?, ? ", new Object[] { start, size },
                 new DiscountRowMapper());
     }
 

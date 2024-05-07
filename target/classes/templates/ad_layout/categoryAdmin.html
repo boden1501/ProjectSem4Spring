@@ -12,6 +12,8 @@
 		<div class="card">
 			<div class="card-body">
 				<h4 class="card-title">Category form</h4>
+				<p th:if="${message}!=null" th:text="${message}" style="color: red"></p>
+				<p th:if="${success}!=null" th:text="${success}" style="color: green"></p>
 				<form class="forms-sample" th:action="@{( ${findCate == null} ? '/admin/submitCategory' : '/admin/update' )}" th:method="post" id="categoryForm">
 					<div class="form-group" th:if="${findCate != null}">
 						<label for="exampleInputID">ID Category</label> 

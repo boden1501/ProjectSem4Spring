@@ -8,6 +8,7 @@ public class Comment {
 	private String Content;
 	private String DateTime;
 	private String Name;
+	private String Avatar;
 	public int getIdComment() {
 		return idComment;
 	}
@@ -43,6 +44,12 @@ public class Comment {
 	}
 	public void setName(String name) {
 		Name = name;
+	}
+	public String getAvatar() {
+		return Avatar;
+	}
+	public void setAvatar(String avatar) {
+		Avatar = avatar;
 	}
 	
 }
