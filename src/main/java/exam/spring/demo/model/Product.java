@@ -14,6 +14,10 @@ public class Product {
 	private int activeProduct;
 	private String img;
 	private int mainImg;
+	private long priceTemp;
+	private String priceDiscount;
+	private String discount;
+	private int quantityBuy;
 	public static final String id_product="idProduct";
 	public static final String name_product="Name";
 	public static final String price_product="Price";
@@ -102,6 +106,30 @@ public class Product {
 	}
 	public void setMainImg(int mainImg) {
 		this.mainImg = mainImg;
+	}
+	public long getPriceTemp() {
+		return priceTemp;
+	}
+	public void setPriceTemp(long priceTemp) {
+		this.priceTemp = priceTemp;
+	}
+	public String getPriceDiscount() {
+		return priceDiscount;
+	}
+	public void setPriceDiscount(String priceDiscount) {
+		this.priceDiscount = priceDiscount;
+	}
+	public String getDiscount() {
+		return discount;
+	}
+	public void setDiscount(String discount) {
+		this.discount = discount;
+	}
+	public int getQuantityBuy() {
+		return quantityBuy;
+	}
+	public void setQuantityBuy(int quantityBuy) {
+		this.quantityBuy = quantityBuy;
 	}
 	
 }

@@ -2,6 +2,7 @@ package exam.spring.demo.model;
 
 public class Checkout {
 	private String idOrder;
+	private int idUser;
 	private String DateCreate;
 	private String nameUser;
 	private String phoneUser;
@@ -71,6 +72,12 @@ public class Checkout {
 	}
 	public void setActive(int active) {
 		this.active = active;
+	}
+	public int getIdUser() {
+		return idUser;
+	}
+	public void setIdUser(int idUser) {
+		this.idUser = idUser;
 	}
 	
 }

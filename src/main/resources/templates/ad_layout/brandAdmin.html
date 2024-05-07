@@ -11,6 +11,8 @@
 		<div class="card">
 			<div class="card-body">
 				<h4 class="card-title">Brand form</h4>
+				<p th:if="${message}!=null" th:text="${message}" style="color: red"></p>
+				<p th:if="${success}!=null" th:text="${success}" style="color: green"></p>
 				<form class="forms-sample" th:action="@{( ${findBrand == null} ? '/admin/submitBrand' : '/admin/updateBrand' )}" th:method="post" id="brandForm">
 					<div class="form-group" th:if="${findBrand != null}">
 						<label for="exampleInputID">ID Brand</label> 

@@ -2,6 +2,7 @@ package exam.spring.demo.repositories;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.time.LocalDateTime;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -26,6 +27,7 @@ public class CommentRepository {
         	item.setContent(rs.getString("Content"));
         	item.setDateTime(rs.getString("Datetime"));
         	item.setName(rs.getString("Name"));
+        	item.setAvatar(rs.getString("Avatar"));
         	return item;
         }
     }
@@ -53,9 +55,10 @@ public class CommentRepository {
     			new Object[] {id});
     }
     
-    public int insert(Comment comment) {
-    	return db.update("INSERT INTO comment(nameComment, active) VALUES(?,?)",
-    			new Object[] {comment.getIdComment(), comment.getIdComment()});
+    public int insert(int idUser,int idProduct,String Content) {
+    	LocalDateTime currentTime = LocalDateTime.now();
+    	return db.update("INSERT INTO comment(idUser,idProduct,Content,DateTime) VALUES(?,?,?,?)",
+    			new Object[] {idUser,idProduct,Content,currentTime});
     }
     
     public int deleteById(int id) {

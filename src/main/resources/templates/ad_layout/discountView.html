@@ -38,7 +38,7 @@
 
 				<td>
 					<input type="hidden" th:value="${product.idProduct}" name="idProduct" /> 
-					<button th:if="${product.idDiscount}==${discount.idDiscount}" class="btn btn-primary" disabled="disabled">Selected</button>
+					<button type="submit" th:if="${product.idDiscount}==${discount.idDiscount}" th:value="0" name="idDiscount" class="btn btn-primary" >Selected</button>
 					<button type="submit" th:if="${product.idDiscount}!=${discount.idDiscount}" th:value="${discount.idDiscount}" name="idDiscount" class="btn btn-outline-primary btn-fw">Select</button>
 				</td>
 			</tr>

@@ -66,7 +66,10 @@ public class CartRepository {
 	public int deleteByID(int idProduct) {
 		return db.update("delete from cart where idCart=?",new Object[] {idProduct});
 	}
-	public int updateQuantiy(int quantity,int idProduct) {
+	public int updateQuantiy(int quantity,int idCart) {
+		return db.update("update cart set Quantity=? where idCart=?",new Object[] {quantity,idCart});
+	}
+	public int updateQuantiyProduct(int quantity,int idProduct) {
 		return db.update("update cart set Quantity=? where idProduct=?",new Object[] {quantity,idProduct});
 	}
 	public int getNum(int idUser) {

@@ -1,10 +1,12 @@
 eclipse.preferences.version=1
 encoding//src/main/java=UTF-8
 encoding//src/main/resources=UTF-8
+<<<<<<< HEAD
 encoding//src/main/resources/templates/ad_layout/admincomments.html=UTF-8
 encoding//src/main/resources/templates/ad_layout/view_account.html=UTF-8
 encoding//src/main/resources/templates/ad_layout/warrantyAdmin.html=UTF-8
 encoding//src/main/resources/templates/client_layout/historyOrder.html=UTF-8
+=======
+>>>>>>> f7bbabc1e751ac5a494b19bd055638a695576ccc
 encoding//src/test/java=UTF-8
-encoding//src/test/resources=UTF-8
 encoding/<project>=UTF-8

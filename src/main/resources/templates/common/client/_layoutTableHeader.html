@@ -1,0 +1,38 @@
+<style>
+.imgAVT {
+	width: 60px;
+	height: 60px;
+	border-radius: 100%;
+}
+
+.avt {
+	margin-left: 10px;
+	margin-right: 5px;
+	float: left;
+}
+</style>
+<div>
+	<table class="table">
+		
+		<tr>
+			<th class="t-head head-it ">Comment</th>
+		</tr>
+		<tr class="cross" th:each="comment:${commentList}">
+			<td class="t-data">
+				<div class="row">
+					<div class="avt">
+						<img class="imgAVT" alt="" th:src="@{'/client/images/'+${comment.Avatar}}">
+					</div>
+					<div class="name">
+						<p style="font-weight: bold;" th:text="${comment.Name}">Name</p>
+					</div>
+					<div class="content" th:text="${comment.Content}">
+						<p>Content</p>
+					</div>
+				</div>
+			</td>
+		</tr>
+
+	</table>
+</div>
+

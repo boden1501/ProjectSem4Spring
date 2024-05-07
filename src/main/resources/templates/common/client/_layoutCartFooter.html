@@ -7,7 +7,8 @@
 			<th>Quantity</th>
 			<th>Price</th>
 			<th>Discount</th>
-			<th></th>
+			<th>Total</th>
+			<th>Remove</th>
 		</tr>
 	</thead>
 	<tbody>
@@ -18,9 +19,10 @@
 				style="width: 80px; height: 80px"
 				th:src="@{'/images/'+${cart.Image}}" alt="" />
 			</td>
-			<td><input type="number" th:value="${cart.Quantity}" /></td>
+			<td><input type="number" th:value="${cart.Quantity}" class="quantity-input" th:data-cart-id="${cart.idCart}" min="1" /></td>
 			<td th:text="${cart.priceProduct}"></td>
-			<td></td>
+			<td><p th:text="'-'+${cart.discount}" th:if="${cart.discount}!=null"></p><p th:if="${cart.discount}==null">-0 VNĐ</p></td>
+			<td><p th:text="${cart.priceDiscount}" th:if="${cart.discount}!=null"></p><p th:text="${cart.priceProduct}" th:if="${cart.discount}==null"></p></td>
 			<td>
 				<button type="submit" th:value="${cart.idCart}" name="idCart">x</button></td>
 
@@ -43,3 +45,31 @@
 </div>
 </div>
 </div>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+
+<script>
+    $(document).ready(function() {
+        $('.quantity-input').on('change', function() {
+        	var cartId = $(this).data('cart-id');
+        	var newQuantity = parseInt($(this).val());
+        	console.log(cartId);
+
+            // Gửi dữ liệu đi bằng AJAX
+            $.ajax({
+                url: '/updateQuantity', // Địa chỉ URL của endpoint xử lý cập nhật giỏ hàng
+                method: 'POST',
+                data: {
+                    cartId: cartId,
+                    newQuantity: newQuantity
+                },
+                success: function(response) {
+                    // Xử lý kết quả trả về nếu cần
+                    console.log('Cập nhật giỏ hàng thành công!');
+                },
+                error: function(xhr, status, error) {
+                    console.error('Đã xảy ra lỗi: ' + error);
+                }
+            });
+        });
+    });
+</script>

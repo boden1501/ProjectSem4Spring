@@ -26,36 +26,44 @@
 				<div class="col-md-5 single-top">
 					<div class="single-w3agile">
 						<div id="picture-frame" th:each="img:${imgProduct}">
-							<img th:src="@{'/images/'+${img.Image}}"
-								th:if="${img.main}==1" data-src="images/si-1.jpg" alt=""
-								class="img-responsive" />
+							<img th:src="@{'/images/'+${img.Image}}" th:if="${img.main}==1"
+								data-src="images/si-1.jpg" alt="" class="img-responsive" />
 						</div>
 					</div>
 				</div>
 				<div class="col-md-7 single-top-left ">
-					
-						<div class="single-right">
+
+					<div class="single-right">
 						<form th:action="@{/product/addCart}" method="post">
 							<h3 th:text="${findProduct.nameProduct}"></h3>
+							<p style="font-size: 20px; color: red;"
+								th:if="${findProduct.quantityProduct}==0">Out of stock</p>
+							<span style="font-weight: lighter;">Quantity in stock: <span
+								th:text="${findProduct.quantityProduct}"></span></span>
 							<div class="block block-w3">
-								<div class="starbox small ghosting" data-start-value="1"></div>
-							</div><br />
+								<div class="starbox small ghosting" th:data-start-value="${findProduct.AvgVote}"></div>
+							</div>
+							<br />
 							<div class="pr-single">
-								<!-- <p class="reduced ">
-								<del th:text="${findProduct.priceProduct}"></del>
-								<p>$5.00</p>
-								
-							</p> -->
-								<p class="reduced ">
+								<p class="reduced " th:if="${priceDiscount}!=null">
+									<del th:text="${findProduct.priceProduct}"></del>
+									<span style="color: red;" th:text="${priceDiscount}">$5.00</span>
+								</p>
+								<p class="reduced " th:if="${priceDiscount}==null">
 									<span style="color: green"
 										th:text="${findProduct.priceProduct}"></span>
 								</p>
+
+
 							</div>
+
+
 							<div>
-								<span>Quantity</span> <input type="number" style="width: 40px;" min="1" value="1" name="quantity">
+								<span>Quantity</span> <input type="number" style="width: 40px;"
+									min="1" value="1" name="quantity">
 							</div>
-							
-							
+
+
 
 							<p class="in-pa" th:text="${findProduct.Detail}"></p>
 
@@ -64,23 +72,31 @@
 								<input type="hidden" th:value="${findProduct.idProduct}"
 									name="id">
 								<button type="submit"
-									class="btn btn-danger my-cart-btn my-cart-b" >Add
-									to Cart</button>
+									class="btn btn-danger my-cart-btn my-cart-b">Add to
+									Cart</button>
+								<p style="margin: 10px; color: red;"
+									th:if="${messageQuantity}!=null" th:text="${messageQuantity}">Message</p>
 							</div>
 
 							<div class="clearfix"></div>
-							</form>
-						</div>
-					
+						</form>
+					</div>
+
 				</div>
 				<div class="clearfix"></div>
 			</div>
 
 		</div>
 	</div>
+
 	<!---->
 	<div class="content-top offer-w3agile">
+
 		<div class="container ">
+			<div th:replace="~{common/client/_layoutComment}"></div>
+			<div th:replace="~{common/client/_layoutTableHeader}"></div>
+
+
 			<div class="spec ">
 				<h3>Special Offers</h3>
 				<div class="ser-t">
@@ -133,22 +149,22 @@
 	<div th:replace="~{common/client/_layoutFooterClient}"></div>
 	<!-- //footer-->
 	<div th:replace="~{common/client/_layoutCartHeader}"></div>
-		<form th:action="@{/product/delete}" th:method="DELETE"> 
-			
-			<input type="hidden" th:value="${findProduct.idProduct}" name="id">
-	<div th:replace="~{common/client/_layoutCartFooter}"></div>
-	<div th:replace="~{common/client/_script}"></div>
+	<form th:action="@{/product/delete}" th:method="DELETE">
+
+		<input type="hidden" th:value="${findProduct.idProduct}" name="id">
+		<div th:replace="~{common/client/_layoutCartFooter}"></div>
+		<div th:replace="~{common/client/_script}"></div>
 </body>
 <!-- <script th:src="@{/webjars/jquery/jquery.min.js}"></script>
 <script th:src="@{/webjars/popper.js/umd/popper.min.js}"></script>
 <script th:src="@{/webjars/bootstrap/js/bootstrap.min.js}"></script>
 <script th:src="@{/assets/bootstrapless-star-rating/star-rating.min.js}"></script>
 <script src="/client/js/jquery.zoomtoo.js"></script> -->
-<script>
+<!-- <script>
 	$(function() {
 		$("#picture-frame").zoomToo({
 			magnify : 1
 		});
 	});
-</script>
+</script> -->
 </html>

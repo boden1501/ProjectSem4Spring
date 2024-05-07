@@ -62,6 +62,23 @@ public class ProductController {
 		return "ad_layout/createAdmin";
 	}
 
+	@RequestMapping(value = "/updateProduct", method = RequestMethod.GET)
+	public String updateProduct(Model model, @RequestParam("id") int id, RedirectAttributes redirectAttributes) {
+		Product product = productRepository.findById(id);
+		List<Category> categoryList = cateRepository.findCategoryAll();
+		List<Brand> brandList = brandRepository.findBrandAll();
+		model.addAttribute("categoryList", categoryList);
+		model.addAttribute("brandList", brandList);
+		model.addAttribute("product", product);
+		return "ad_layout/createAdmin";
+	}
+
+	@RequestMapping(value = "/CHKupdateProduct", method = RequestMethod.PUT)
+	public String chkUpdate(@RequestParam("id") int id, @Validated Product item) {
+		productRepository.updateProduct(item, id);
+		return "redirect:/admin/updateProduct?id=" + id;
+	}
+
 	@RequestMapping(value = "/findProduct", method = RequestMethod.POST)
 	public String findProduct(@RequestParam("txtSearch") String txtSearch, Model model) {
 		List<Product> productList = productRepository.findByName(txtSearch);
@@ -80,11 +97,11 @@ public class ProductController {
 	public String imageProduct(RedirectAttributes redirectAttributes, @RequestParam("id") int id, HttpSession session,
 			Model model) {
 		Product findProduct = productRepository.findById(id);
-		List<Image> listImg=imgRepository.findListImgByID(id);
-		int mainCheck=1;
-		for(Image img:listImg) {
-			if(img.getMain()==1) {
-				model.addAttribute("mainCheck",mainCheck);
+		List<Image> listImg = imgRepository.findListImgByID(id);
+		int mainCheck = 1;
+		for (Image img : listImg) {
+			if (img.getMain() == 1) {
+				model.addAttribute("mainCheck", mainCheck);
 			}
 		}
 		session.setAttribute("Product", findProduct);
@@ -156,8 +173,23 @@ public class ProductController {
 		return "redirect:/admin/images?id=" + id;
 	}
 
+	@RequestMapping(value = "/images/deleteIMG/{idImage:.+}", method = RequestMethod.GET)
+	public String delete(@PathVariable int idImage, @RequestParam("id") int id) {
+		imgRepository.deleteByID(idImage);
+		return "redirect:/admin/images?id=" + id;
+	}
+
+	@RequestMapping(value = "/images/updateMain", method = RequestMethod.POST)
+	public String updateMain(@RequestParam("productId") int id, @RequestParam("imgId") int imgId,
+			@RequestParam("isChecked") boolean isChecked) {
+		imgRepository.updateMain(1, imgId);
+		imgRepository.update(0, imgId, id);
+		return "redirect:/admin/images?id=" + id;
+	}
+
 	@RequestMapping(value = "/saveImage", method = RequestMethod.POST)
-	public String saveImage(@RequestParam(value = "mainImg", required = false) String nameImg,RedirectAttributes redirectAttributes, @RequestParam("id") int id) throws IOException {
+	public String saveImage(@RequestParam(value = "mainImg", required = false) String nameImg,
+			RedirectAttributes redirectAttributes, @RequestParam("id") int id) throws IOException {
 		String uploadDir = "src/main/resources/static/images/";
 		List<ImageInfo> imageInfos = storageService.loadAll().map(imageData -> {
 			if (imageData != null && imageData.getData() != null) {
@@ -170,7 +202,7 @@ public class ProductController {
 			}
 			return null;
 		}).collect(Collectors.toList());
-		System.out.println("mainImg:" +nameImg);
+		System.out.println("mainImg:" + nameImg);
 		for (ImageInfo img : imageInfos) {
 			if (img != null && img.getData() != null) {
 				Integer mainImg;
@@ -187,10 +219,21 @@ public class ProductController {
 				Files.write(Paths.get(uploadDir + img.getName()), img.getData());
 			}
 		}
-
-		// Sau khi đã lưu xong tất cả các hình ảnh, bạn có thể gọi deleteAll()
-		storageService.deleteAllFilesInRoot();
-
+		List<Image> imgList = imgRepository.findListImgByID(id);
+		if (nameImg != null) {
+			for (Image img : imgList) {
+				System.out.println("name:" + img.getImage());
+				System.out.println("name temp:" + nameImg);
+				if (img.getImage().equals(nameImg)) {
+					System.out.println("name:" + img.getImage());
+					imgRepository.updateMain(1, img.getIdImage());
+				} else {
+					imgRepository.update(0, img.getIdImage(), id);
+				}
+			}
+			// Sau khi đã lưu xong tất cả các hình ảnh, bạn có thể gọi deleteAll()
+			storageService.deleteAllFilesInRoot();
+		}
 		return "redirect:/admin/images?id=" + id;
 	}
 

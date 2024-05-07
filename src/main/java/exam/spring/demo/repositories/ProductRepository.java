@@ -39,14 +39,17 @@ public class ProductRepository {
 		        item.setActiveProduct(rs.getInt(Product.active_product));
 		        item.setDetail(rs.getString(Product.detail_product));
 		        item.setNameBrand(rs.getString(Brand.nameBrand));
+		        item.setPriceTemp(rs.getLong(Product.price_product));
 		        return item;
 		    }
 
 		
 	}
 	public List<Product> findProductAll() {
-
 		return db.query("SELECT * FROM product p join brand b on p.idBrand=b.idBrand ", new ProductRowMapper());
+	}
+	public List<Product> findProductActive() {
+		return db.query("SELECT * FROM product p join brand b on p.idBrand=b.idBrand where p.Active=1 ", new ProductRowMapper());
 	}
 //	public List<Product> findProductIMGAll() {
 //
@@ -65,8 +68,16 @@ public class ProductRepository {
 	}
 
 	public Product findById(int id) {
-		 return db.queryForObject("select * from product p join brand b on p.idBrand=b.idBrand where idProduct=?", new ProductRowMapper(),
+		 return db.queryForObject("select * from product p join brand b on p.idBrand=b.idBrand where idProduct=? ", new ProductRowMapper(),
 	                new Object[] { id });
+	}
+	public List<Product> findByBrand(int id) {
+		 return db.query("select * from product p join brand b on p.idBrand=b.idBrand join category c on p.idCategory=c.idCategory where b.idBrand=? and p.Active=1 ", new ProductRowMapper(),
+	                new Object[] { id });
+	}
+	public List<Product> findByCategory(int idCategory) {
+		 return db.query("select * from product p join category c on p.idCategory=c.idCategory join brand b on p.idBrand=b.idBrand where c.idCategory=? and p.Active=1 ", new ProductRowMapper(),
+	                new Object[] { idCategory });
 	}
 	public List<Product> findByName(String Name) {
 		 return db.query("select * from product p join brand b on p.idBrand=b.idBrand where Name like ?", new ProductRowMapper(),
@@ -76,12 +87,19 @@ public class ProductRepository {
 		return db.update(
 				"INSERT INTO product (Name,idBrand,idCategory,Price,Quantity,Active,Detail) VALUES (?, ?, ?, ?, ?, ?, ?)",
 				new Object[] { product.getNameProduct(), product.getIdBrand(), product.getIdCategory(),
-					 product.getPriceProduct(), product.getQuantityProduct(),
+					 product.getPriceTemp(), product.getQuantityProduct(),
 						product.getActiveProduct(), product.getDetail() });
 	}
-
+	public int updateProduct(Product product,int idProduct) {
+        return db.update("update product set Name=?,idBrand=?,idCategory=?,Price=?,Quantity=?,Active=?,Detail=? where idProduct = ?",
+                new Object[] { product.getNameProduct(),product.getIdBrand(),product.getIdCategory(),product.getPriceTemp(),product.getQuantityProduct(),product.getActiveProduct(),product.getDetail(),idProduct});
+    }
     public int update(int idDiscount,int idProduct) {
         return db.update("update product set idDiscount=? where idProduct = ?",
                 new Object[] { idDiscount,idProduct});
+    }
+    public int updateQuantity(int Quantity,int idProduct) {
+        return db.update("update product set Quantity=? where idProduct = ?",
+                new Object[] { Quantity,idProduct});
     }
 }

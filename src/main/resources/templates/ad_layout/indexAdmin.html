@@ -44,6 +44,7 @@
 			<th>Images</th>
 			<th>Comment</th>
 			<th>Discount</th>
+			<th>Edit</th>
 		</tr>
 	</thead>
 	<tbody>
@@ -58,6 +59,7 @@
 			<td><a th:href="@{/admin/images(id=${data.idProduct})}">View</a></td>
 			<td><a th:href="@{/admin/comments(id=${data.idProduct})}">View</a></td>
 			<td><a th:href="@{/admin/discountView(id=${data.idProduct})}">Add</a></td>
+			<td><a th:href="@{/admin/updateProduct(id=${data.idProduct})}">Edit</a></td>
 		</tr>
 		<div th:replace="~{common/_layoutFormFooter}"></div>
 		<div class="btn-group" role="group" aria-label="Basic example"

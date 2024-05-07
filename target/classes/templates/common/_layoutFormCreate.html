@@ -1,21 +1,27 @@
 <div class="col-12 grid-margin stretch-card">
 	<div class="card">
 		<div class="card-body">
-			<h4 class="card-title">Basic form elements</h4>
-			<form class="forms-sample" action="/admin/createProduct"
-				th:method="POST">
+			<h4 class="card-title">Form</h4>
+			<form class="forms-sample"
+				th:action="@{( ${product == null} ? '/admin/createProduct' : '/admin/CHKupdateProduct' )}"
+				th:method="post">
+				<input type="hidden"
+					th:value="${product != null ? product.idProduct : ''}" name="id" />
 				<div class="form-group">
 					<label for="exampleInputName1">Tên Sản Phẩm</label> <input
 						type="text" class="form-control" id="exampleInputName1"
-						placeholder="Name Product" name="nameProduct">
+						placeholder="Name Product" name="nameProduct"
+						th:value="${product != null ? product.nameProduct : ''}">
 				</div>
 				<div class="form-group">
 					<label for="exampleInputEmail3">Loại sản phẩm</label> <select
 						name="idCategory" class="form-control" id="exampleSelectGender">
 						<option th:each="category : ${categoryList}"
 							th:value="${category.id}" th:text="${category.name}"
+							th:selected="${product != null and product.idCategory == category.id}"
 							th:if="${category.active}"></option>
 					</select>
+
 				</div>
 				<div class="form-group">
 					<label for="exampleSelectGender">Giá tiền</label>
@@ -24,7 +30,8 @@
 							<span class="input-group-text bg-primary text-white">$</span>
 						</div>
 						<input type="text" class="form-control"
-							aria-label="Amount (to the nearest dollar)" name="priceProduct">
+							aria-label="Amount (to the nearest dollar)" name="priceTemp"
+							th:value="${product != null ? product.priceTemp : ''}">
 						<div class="input-group-append">
 							<span class="input-group-text">VNĐ</span>
 						</div>
@@ -33,49 +40,49 @@
 				<div class="form-group">
 					<label for="exampleInputQuantity">Số lượng</label> <input
 						type="text" class="form-control" id="exampleInputQuantity"
-						placeholder="Quantity" name="quantityProduct">
+						placeholder="Quantity" name="quantityProduct"
+						th:value="${product != null ? product.quantityProduct : ''}"
+						oninput="formatNumber()">
 				</div>
 				<div class="form-group">
 					<label for="exampleSelectGender">Nhãn hàng</label> <select
-						name="idBrand" class="form-control" id="exampleSelectGender">
+						name="idBrand" class="form-control" id="exampleSelectGender"
+						th:value="${product != null ? product.idBrand : ''}">
 						<option th:each="brand : ${brandList}"
 							th:value="${brand.id_brand}" th:text="${brand.name_brand}"
+							th:selected="${product != null and product.idBrand == brand.id_brand}"
 							th:if="${brand.active_brand}" name="idBrand"></option>
 					</select>
 
 				</div>
-		
-		<!--  		<div class="form-group">
-					<label for="image">Hình ảnh</label> <input type="file" name="image"
-						class="file-upload-default" multiple>
-					<div class="input-group col-xs-12">
-						<input type="file" class="form-control file-upload-info"
-							placeholder="Upload Image" accept="image/*" multiple> <span
-							class="input-group-append">
-							<button class="file-upload-browse btn btn-primary" type="button">Upload</button>
-						</span>
-					</div>
-				</div>
--->
-
 				<div class="form-group">
 					<label for="exampleTextarea1">Chi tiết sản phẩm</label>
 					<textarea class="form-control" id="exampleTextarea1" rows="4"
-						name="Detail"></textarea>
+						name="Detail" th:text="${product != null ? product.Detail : ''}"></textarea>
 				</div>
+
+
 				<div class="form-group">
 					<div class="form-check">
 
 						<label class="form-check-label"> <input type="checkbox"
-							class="form-check-input" name="activeProduct" value="1">
+							class="form-check-input" name="activeProduct" value="1"
+							th:checked="${product != null ? product.activeProduct == 1 : false}">
 							Active
 						</label>
 					</div>
 
 				</div>
-				<button type="submit" class="btn btn-primary mr-2">Submit</button>
-				<button class="btn btn-light">Cancel</button>
+				<button type="submit" class="btn btn-primary mr-2"
+					th:if="${product == null}">Submit</button>
+				<input name="_method" type="hidden" value="PUT"
+					th:if="${product != null}" /> <input type="submit"
+					class="btn btn-primary mr-2" value="Save" name="btnUpdate"
+					id="btnUpdate" th:if="${product != null}">
+				<button class="btn btn-light" th:if="${product == null}">Cancel</button>
+
 			</form>
 		</div>
 	</div>
 </div>
+

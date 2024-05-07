@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import exam.spring.demo.model.Brand;
 import exam.spring.demo.repositories.BrandRepository;
@@ -66,22 +67,30 @@ public class BrandController {
 
 	@CrossOrigin
 	@RequestMapping(value = "/updateBrand", method = RequestMethod.PUT)
-	public String updateBrand(@Validated Brand item) {
+	public String updateBrand(@Validated Brand item,RedirectAttributes redirectAttributes) {
+		List<Brand> branList = brandRepository.findBrandAll();
+		String name=item.getName_brand().trim();
+		for(Brand brand:branList) {
+			if(brand.getName_brand().equalsIgnoreCase(name)) {
+				redirectAttributes.addFlashAttribute("message","Name already exixts!");
+				return "redirect:/admin/brand";
+			}
+		}
 		brandRepository.update(item);
 		return "redirect:/admin/brand";
 	}
 
 	@CrossOrigin
 	@RequestMapping(value = "/submitBrand", method = RequestMethod.POST)
-	public String saveBrand(@Validated Brand item, Model model) {
+	public String saveBrand(@Validated Brand item, Model model,RedirectAttributes redirectAttributes) {
 		try {
 			brandRepository.insert(item);
 			String errorMessage = "Add Successfully.";
-			model.addAttribute("errorMessage", errorMessage);
+			redirectAttributes.addFlashAttribute("success", errorMessage);
 		} catch (DataIntegrityViolationException e) {
 			// Xử lý ngoại lệ khi cột active có giá trị NULL
-			String errorMessage = "An error occurred while saving the category. Please make sure all fields are filled correctly.";
-			model.addAttribute("errorMessage", errorMessage);
+			String errorMessage = "Name already exixts!";
+			redirectAttributes.addFlashAttribute("message", errorMessage);
 		}
 
 		return "redirect:/admin/brand";

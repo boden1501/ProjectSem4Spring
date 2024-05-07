@@ -40,7 +40,6 @@
 	<thead>
 		<tr>
 			<th>No.</th>
-			<th>ID</th>
 			<th>NameUser</th>
 			<th>comment</th>
 			<th>delete</th>
@@ -50,9 +49,14 @@
 		
 			<tr th:each="cmt, index : ${datalist}">
 
+<<<<<<< HEAD
 				 <td class="text-left" th:text="${index.index + 1}+${row}"></td>
 				<td>1</td>
 				<td class="text-left" th:text="${cmt.idComment}"></td>
+=======
+				<!-- <td class="text-left" th:text="${index.index + 1}+${row}"></td> -->
+				<td th:text="${index.index+1}"></td>
+>>>>>>> f7bbabc1e751ac5a494b19bd055638a695576ccc
 				<td class="text-left" th:text="${cmt.Name}"></td>
 				<td class="text-left" th:text="${cmt.Content}"></td>
 				<td class="text-left">

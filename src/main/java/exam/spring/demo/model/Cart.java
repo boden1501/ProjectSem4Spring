@@ -8,6 +8,8 @@ public class Cart {
 	private String Image;
 	private String nameProduct;
 	private String priceProduct;
+	private String priceDiscount;
+	private String discount;
 	private int idDiscount;
 	public final static String id_cart="idCart";
 	public final static String id_product="idProduct";
@@ -64,6 +66,18 @@ public class Cart {
 	}
 	public void setIdDiscount(int idDiscount) {
 		this.idDiscount = idDiscount;
+	}
+	public String getPriceDiscount() {
+		return priceDiscount;
+	}
+	public void setPriceDiscount(String priceDiscount) {
+		this.priceDiscount = priceDiscount;
+	}
+	public String getDiscount() {
+		return discount;
+	}
+	public void setDiscount(String discount) {
+		this.discount = discount;
 	}
 	
 }
