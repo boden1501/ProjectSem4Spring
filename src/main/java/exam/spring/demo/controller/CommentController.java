@@ -5,8 +5,9 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
@@ -24,7 +25,7 @@ public class CommentController {
 	@Autowired 
 	CommentRepository com;
 
-	@RequestMapping(value = "/comments", method= RequestMethod.GET)
+	@GetMapping("/comments")
 	public String admincomments (@RequestParam("id") int id,Model model, @RequestParam(defaultValue ="0") int page,
 			@RequestParam(defaultValue="10") int size,RedirectAttributes redirectAttributes) {
 		Product productList=pro.findById(id);
@@ -52,7 +53,7 @@ public class CommentController {
 		    return "ad_layout/admincomments";
 		    
 	}
-	@RequestMapping(value = "/commentDelete", method = RequestMethod.DELETE)
+	@DeleteMapping("/commentDelete")
 	public String delete (@RequestParam("btn") int idcmt,@RequestParam("btnid") int id,Model model,RedirectAttributes redirectAttributes){
 		System.out.println("id t: "+id);
 		com.deleteById(idcmt);

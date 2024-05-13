@@ -16,11 +16,7 @@ import org.springframework.session.Session;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.annotation.Validated;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RequestParam;
-
+import org.springframework.web.bind.annotation.*;
 import exam.spring.demo.model.Cart;
 import exam.spring.demo.model.CheckoutTemp;
 import exam.spring.demo.model.Product;
@@ -96,7 +92,7 @@ public class CheckoutController {
 	@Autowired
 	PaymentController payment;
 
-	@RequestMapping(value = "/chkCheckout", method = RequestMethod.POST)
+	@PostMapping("/chkCheckout")
 	public String checkout(HttpServletRequest request, @RequestParam("nameUser") String name,
 			@RequestParam("phoneUser") String phone, @RequestParam("emailUser") String email,
 			@RequestParam("addressUser") String address, @RequestParam("discount") double discount,
@@ -121,7 +117,7 @@ public class CheckoutController {
 		}
 	}
 
-	@RequestMapping(value = "/vnpay_return", method = RequestMethod.GET)
+	@GetMapping("/vnpay_return")
 	public String returnPayment(HttpServletRequest request, Model model, @RequestParam("vnp_TxnRef") String vnp_TxnRef,
 			@RequestParam("vnp_Amount") String vnp_Amount, @RequestParam("vnp_OrderInfo") String vnp_OrderInfo,
 			@RequestParam("vnp_ResponseCode") String vnp_ResponseCode,

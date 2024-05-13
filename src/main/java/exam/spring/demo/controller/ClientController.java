@@ -14,10 +14,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.annotation.Validated;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
@@ -63,7 +60,7 @@ public class ClientController {
 	@Autowired
 	IndexRepository indexRepository;
 	
-	@RequestMapping(value = "", method = RequestMethod.GET)
+	@GetMapping("")
 	public String index(Model model, HttpServletRequest request,HttpSession session) {
 		User usr = (User) session.getAttribute("usrList");
 		String URL=request.getRequestURI();
@@ -128,7 +125,7 @@ public class ClientController {
 		}
 	}
 
-	@RequestMapping(value = "/product", method = RequestMethod.GET)
+	@GetMapping("/product")
 	public String product(Model model, HttpSession session, HttpServletRequest request) {
 		User usr = (User) session.getAttribute("usrList");
 		String URL=request.getRequestURI();
@@ -193,7 +190,7 @@ public class ClientController {
 			return "client_layout/productClient";
 		}
 	}
-	@RequestMapping(value = "/product/brand", method = RequestMethod.GET)
+	@GetMapping("/product/brand")
 	public String productBrand(@RequestParam("id") int id,Model model, HttpSession session, HttpServletRequest request) {
 		User usr = (User) session.getAttribute("usrList");
 		String URL=request.getRequestURI();
@@ -256,7 +253,7 @@ public class ClientController {
 			return "client_layout/productClient";
 		}
 	}
-	@RequestMapping(value = "/product/category", method = RequestMethod.GET)
+	@GetMapping("/product/category")
 	public String productCategory(@RequestParam("id") int id,Model model, HttpSession session, HttpServletRequest request) {
 		User usr = (User) session.getAttribute("usrList");
 		String URL=request.getRequestURI();
@@ -319,7 +316,7 @@ public class ClientController {
 			return "client_layout/productClient";
 		}
 	}
-	@RequestMapping(value = "/product/detail", method = RequestMethod.GET)
+	@GetMapping("/product/detail")
 	public String productDetail(@RequestParam("id") int id, Model model, HttpSession session,
 			HttpServletRequest request,RedirectAttributes redirectAttributes) {
 		User usr = (User) session.getAttribute("usrList");
@@ -391,13 +388,13 @@ public class ClientController {
 		}
 		return "client_layout/detail";
 	}
-	@RequestMapping(value="/chkAddCommnent",method=RequestMethod.POST)
+	@PostMapping("/chkAddCommnent")
 	public String addComment(@RequestParam("id") int id,@RequestParam("content") String content,HttpSession session) {
 		User usr = (User) session.getAttribute("usrList");
 		commentRepository.insert(usr.getId(), id, content);
 		return "redirect:/product/detail?id="+id;
 	}
-	@RequestMapping(value = "/searchProduct",method=RequestMethod.POST)
+	@PostMapping("/searchProduct")
 	public String searchProduct(@RequestParam("search") String search,Model model, HttpSession session,
 			HttpServletRequest request,RedirectAttributes redirectAttributes) {
 		User usr = (User) session.getAttribute("usrList");
@@ -463,14 +460,14 @@ public class ClientController {
 			return "client_layout/productClient";
 		}
 	}
-	@RequestMapping(value="/updateQuantity",method=RequestMethod.POST)
+	@PostMapping("/updateQuantity")
 	public String updateQuantity(@RequestParam("cartId") int cartId,
             @RequestParam("newQuantity") int newQuantity,HttpSession session,HttpServletRequest request) {
 		String url = (String) request.getSession().getAttribute("URL");
 		cartRepository.updateQuantiy(newQuantity, cartId);
 		return "redirect:"+url;
 	}
-	@RequestMapping(value = "/product/addCart", method = RequestMethod.POST)
+	@PostMapping("/product/addCart")
 	public String addCart(@RequestParam("id") int id, @RequestParam("quantity") int quantity, HttpSession session,
 			RedirectAttributes redirectAttributes,HttpServletRequest request) {
 		String url = (String) request.getSession().getAttribute("URL");
@@ -506,7 +503,7 @@ public class ClientController {
 		return "redirect:" + url;
 	}
 
-	@RequestMapping(value = "/product/delete", method = RequestMethod.DELETE)
+	@DeleteMapping("/product/delete")
 	public String deleteCart(@RequestParam("id") int id, @RequestParam("idCart") int idCart,HttpServletRequest request) {
 		String url = (String) request.getSession().getAttribute("URL");
 		System.out.println("URL:" + url);
@@ -514,7 +511,7 @@ public class ClientController {
 		return "redirect:" + url;
 	}
 
-	@RequestMapping(value = "/product/deleteProduct", method = RequestMethod.DELETE)
+	@DeleteMapping("/product/deleteProduct")
 	public String deletePro(@RequestParam("idCart") int idCart,HttpServletRequest request) {
 		String url = (String) request.getSession().getAttribute("URL");
 		System.out.println("URL:" + url);
@@ -522,21 +519,21 @@ public class ClientController {
 		return "redirect:" + url;
 	}
 
-	@RequestMapping(value = "/profile", method = RequestMethod.GET)
+	@GetMapping("/profile")
 	public String profile(HttpSession session, Model model) {
 		User usr = (User) session.getAttribute("usrList");
 		model.addAttribute("usr", usr);
 		return "client_layout/profileClient";
 	}
 
-	@RequestMapping(value = "/editProfile", method = RequestMethod.GET)
+	@GetMapping("/editProfile")
 	public String editProfile(HttpSession session, Model model) {
 		User usr = (User) session.getAttribute("usrList");
 		model.addAttribute("usr", usr);
 		return "client_layout/editProfileClient";
 	}
 
-	@RequestMapping(value = "/updateProfile", method = RequestMethod.PUT)
+	@PutMapping("/updateProfile")
 	public String updateProfile(@Validated User usr, HttpServletRequest request,
 			@RequestParam(value = "imgAvt", required = false) MultipartFile imgAvt)
 			throws IllegalStateException, IOException {
@@ -553,7 +550,7 @@ public class ClientController {
 		return "redirect:/profile";
 	}
 	
-	@RequestMapping(value = "/products", method = RequestMethod.GET)
+	@GetMapping("/products")
 	public String getSortedAndFilteredProducts(
 			@RequestParam(required = false) String sortBy,
 			@RequestParam(required = false) String filterBy,Model model,HttpSession session,HttpServletRequest request) {

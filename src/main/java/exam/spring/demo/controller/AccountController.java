@@ -6,12 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.annotation.Validated;
-import org.springframework.web.bind.annotation.CrossOrigin;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RequestParam;
-
+import org.springframework.web.bind.annotation.*;
 import exam.spring.demo.model.User;
 
 import exam.spring.demo.repositories.UserRepository;
@@ -21,7 +16,7 @@ import exam.spring.demo.repositories.UserRepository;
 public class AccountController {
 	@Autowired
 	UserRepository usr;
-	@RequestMapping(value = "/viewAccount",method= RequestMethod.GET)
+	@GetMapping("/viewAccount")
 	public String  viewAccount(Model model, @RequestParam(defaultValue ="0") int page,
 			@RequestParam(defaultValue="10") int size) {
 		
@@ -48,13 +43,13 @@ public class AccountController {
 }
 
 	@CrossOrigin
-	@RequestMapping(value ="/updateAccount", method = RequestMethod.PUT)
+	@PutMapping("/updateAccount")
 	public String updateAccount (@Validated User item) {
 		System.out.println("ID:"+item.getId());
 		usr.update(item);
 		return "redirect:/admin/viewAccount";
 	}
-    @RequestMapping(value = "/search", method = RequestMethod.POST)
+    @PostMapping("/search")
     public String searchName(@RequestParam("nameSearch") String keyword,Model model) {
     	List<User> userList =usr.findByName(keyword,keyword);
     	model.addAttribute("userList",userList);

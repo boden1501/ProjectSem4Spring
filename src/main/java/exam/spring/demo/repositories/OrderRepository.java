@@ -54,16 +54,8 @@ public class OrderRepository {
 	            new Object[] { idOrder,idUser ,DateCreate, chkTemp.getSubTotalPrice(), chkTemp.getTotalPrice(), chkTemp.getDiscountPrice(), chkTemp.getNameUser(), chkTemp.getPhoneUser(), chkTemp.getAddressUser(), chkTemp.getEmailUser(), active});
 	}
 
-<<<<<<< HEAD
-    
-	/*
-	 * public int update(Checkout Checkout) { return db.
-	 * update("update Checkout set nameCheckout = ?, active = ? where idCheckout = ?"
-	 * , new Object[] { Checkout.getName_Checkout(), Checkout.getActive_Checkout(),
-	 * Checkout.getId_Checkout()}); }
-	 */
+	public void updateOrderStatus(int orderId, int newStatus) {
+        String sql = "UPDATE `order` SET active = ? WHERE idOrder = ?";
+        db.update(sql, newStatus, orderId);
+    }
 }
-=======
-
-}
->>>>>>> f7bbabc1e751ac5a494b19bd055638a695576ccc

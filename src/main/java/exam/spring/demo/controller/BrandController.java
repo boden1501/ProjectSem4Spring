@@ -7,10 +7,7 @@ import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.annotation.Validated;
-import org.springframework.web.bind.annotation.CrossOrigin;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import exam.spring.demo.model.Brand;
@@ -23,7 +20,7 @@ public class BrandController {
 	@Autowired
 	BrandRepository brandRepository;
 
-	@RequestMapping(value = "/brand", method = RequestMethod.GET)
+	@GetMapping("/brand")
 	public String indexBrand(Model model, @RequestParam(defaultValue = "0") int page,
 			@RequestParam(defaultValue = "5") int size) {
 		int offset = page * size;
@@ -47,7 +44,7 @@ public class BrandController {
 	}
 
 	@CrossOrigin
-	@RequestMapping(value = "/brandsUpdate", method = RequestMethod.GET)
+	@GetMapping("/brandsUpdate")
 	public String getBrand(@RequestParam("id") int id, Model model) {
 		Brand findCate = brandRepository.findById(id);
 		model.addAttribute("findBrand", findCate);
@@ -66,7 +63,7 @@ public class BrandController {
 	}
 
 	@CrossOrigin
-	@RequestMapping(value = "/updateBrand", method = RequestMethod.PUT)
+	@PutMapping("/updateBrand")
 	public String updateBrand(@Validated Brand item,RedirectAttributes redirectAttributes) {
 		List<Brand> branList = brandRepository.findBrandAll();
 		String name=item.getName_brand().trim();
@@ -81,7 +78,7 @@ public class BrandController {
 	}
 
 	@CrossOrigin
-	@RequestMapping(value = "/submitBrand", method = RequestMethod.POST)
+	@PostMapping("/submitBrand")
 	public String saveBrand(@Validated Brand item, Model model,RedirectAttributes redirectAttributes) {
 		try {
 			brandRepository.insert(item);

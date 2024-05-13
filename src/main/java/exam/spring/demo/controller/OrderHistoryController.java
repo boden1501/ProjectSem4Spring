@@ -6,9 +6,9 @@ import java.util.Map;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
@@ -27,7 +27,7 @@ public class OrderHistoryController {
 	OrderRepository orderRepository;
 	@Autowired
 	OrderDetailRepository detailRepository;
-	@RequestMapping(value = "/orderHistory", method = RequestMethod.GET)
+	@GetMapping("/orderHistory")
 	public String index(HttpSession session, Model model, @RequestParam(defaultValue = "0") int page,
 	        @RequestParam(defaultValue = "5") int size) {
 	    User usr = (User) session.getAttribute("usrList");
@@ -56,14 +56,14 @@ public class OrderHistoryController {
 	    return "client_layout/orderHistoryClient";
 	}
 
-	@RequestMapping(value = "/orderDetail", method = RequestMethod.GET)
+	@GetMapping("/orderDetail")
 	public String orderDetail(Model model, @RequestParam("idOrder") String idOrder) {
 	    List<CheckoutDT> detailList = detailRepository.findByID(idOrder);
 	    model.addAttribute("detailList", detailList);
 	    return "common/client/_layoutModal"; // Trả về fragment chứa thông tin chi tiết đơn hàng
 	}
 
-
+	
 
 
 

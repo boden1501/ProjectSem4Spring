@@ -8,11 +8,7 @@ import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.annotation.Validated;
-import org.springframework.web.bind.annotation.CrossOrigin;
-
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import exam.spring.demo.model.Category;
@@ -36,7 +32,7 @@ public class AdminController {
 	ProductRepository productRepository;
 	@Autowired
 	DiscountRepository discountRepository;
-	@RequestMapping(value = "", method = RequestMethod.GET)
+	@GetMapping("")
 	public String indexAdmin(Model model,@RequestParam(defaultValue = "0") int page, @RequestParam(defaultValue = "5") int size) {
 		int offset=page*size;
 		List<Product> dataList = productRepository.findAll(offset,size);
@@ -56,7 +52,7 @@ public class AdminController {
 		return "ad_layout/indexAdmin";
 	}
 
-	@RequestMapping(value = "/login", method = RequestMethod.GET)
+	@GetMapping("/login")
 	public String loginfrm(Model model, HttpServletRequest request) {
 		Object acc = request.getSession().getAttribute("myaccAD");
 		if (acc != null) {
@@ -65,7 +61,7 @@ public class AdminController {
 		return "ad_layout/loginAdmin";
 	}
 
-	@RequestMapping(value = "/chklogin", method = RequestMethod.POST)
+	@PostMapping("/chklogin")
 	public String loginCHK(@RequestParam("usrad") String username, @RequestParam("pwdad") String password,
 			HttpServletRequest request) {
 		Logger log = Logger.getGlobal();
@@ -87,7 +83,7 @@ public class AdminController {
 
 	}
 
-	@RequestMapping(value = "/chklogout", method = RequestMethod.GET)
+	@GetMapping("/chklogout")
 	public String logoutCHK(Model model, HttpServletRequest request) {
 		request.getSession().removeAttribute("myaccAD");
 		return "redirect:/admin/login";
@@ -95,7 +91,7 @@ public class AdminController {
 
 	
 
-	@RequestMapping(value = "/category", method = RequestMethod.GET)
+	@GetMapping("/category")
 	public String categoryAdmin(Model model, @RequestParam(defaultValue = "0") int page,
 			@RequestParam(defaultValue = "5") int size) {
 		// Tính toán offset dựa trên trang và kích thước trang
@@ -121,7 +117,7 @@ public class AdminController {
 	}
 
 	@CrossOrigin
-	@RequestMapping(value = "/categoriesUpdate", method = RequestMethod.GET)
+	@GetMapping("/categoriesUpdate")
 	public String getCategory(@RequestParam("id") int id, Model model) {
 		Category findCate = cateRepository.findById(id);
 		model.addAttribute("findCate", findCate);
@@ -140,7 +136,7 @@ public class AdminController {
 	}
 
 
-	@RequestMapping(value = "/update", method = RequestMethod.PUT)
+	@PutMapping("/update")
 	public String updateCategory(RedirectAttributes redirectAttributes,@Validated Category item) {
 		List<Category> itemList=cateRepository.findCategoryAll();
 		for(Category cate:itemList) {
@@ -159,7 +155,7 @@ public class AdminController {
 	}
 
 	@CrossOrigin
-	@RequestMapping(value = "/submitCategory", method = RequestMethod.POST)
+	@PostMapping("/submitCategory")
 	public String saveCategory(@Validated Category item, Model model,RedirectAttributes redirectAttributes) {
 		try {
 			cateRepository.insert(item);

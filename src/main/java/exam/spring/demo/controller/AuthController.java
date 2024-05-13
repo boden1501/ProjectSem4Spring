@@ -8,9 +8,10 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import exam.spring.demo.model.User;
 import exam.spring.demo.repositories.UserRepository;
@@ -32,7 +33,7 @@ public class AuthController {
 		return "/auth/login";
 	}
 
-	@RequestMapping(value = "/chklogin", method = RequestMethod.POST)
+	@PostMapping("/chklogin")
 	public String loginCHK(@RequestParam("usr") String username, @RequestParam("pwd") String password,
 			HttpServletRequest request, HttpSession session) {
 		Logger log = Logger.getGlobal();
@@ -58,7 +59,7 @@ public class AuthController {
 
 	}
 
-	@RequestMapping(value = "/chklogout", method = RequestMethod.GET)
+	@GetMapping("/chklogout")
 	public String logoutCHK(Model model, HttpServletRequest request) {
 		request.getSession().removeAttribute("usrList");
 		return "redirect:/";
@@ -69,8 +70,19 @@ public class AuthController {
 		return "/auth/register";
 	}
 
-	@RequestMapping(value = "/register", method = RequestMethod.POST)
-	public String saveUser(@Validated User user, Model model) {
+	@PostMapping("/register")
+	public String saveUser(@Validated User user, Model model,RedirectAttributes redirectAttributes) {
+		List<User> dataList = usrRepository.findAll();
+		for (User usr : dataList) {
+			if (usr.getName() == user.getName()) {
+				redirectAttributes.addFlashAttribute("errorName","This username has been taken, please choose another one!");
+				return "redirect:/register";
+			}
+			if (usr.getEmail() == user.getEmail()) {
+				redirectAttributes.addFlashAttribute("errorEmail","This email has been taken, please choose another one!");
+				return "redirect:/register";
+			}
+		}
 		usrRepository.registerUser(user);
 		return "redirect:/auth/login";
 	}

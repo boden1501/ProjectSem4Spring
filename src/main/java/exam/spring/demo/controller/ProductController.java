@@ -15,12 +15,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.annotation.Validated;
-import org.springframework.web.bind.annotation.CrossOrigin;
-import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.mvc.method.annotation.MvcUriComponentsBuilder;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
@@ -53,7 +48,7 @@ public class ProductController {
 	@Autowired
 	FilesStorageService storageService;
 
-	@RequestMapping(value = "/create", method = RequestMethod.GET)
+	@GetMapping("/create")
 	public String createProduct(Model model) {
 		List<Category> categoryList = cateRepository.findCategoryAll();
 		List<Brand> brandList = brandRepository.findBrandAll();
@@ -62,7 +57,7 @@ public class ProductController {
 		return "ad_layout/createAdmin";
 	}
 
-	@RequestMapping(value = "/updateProduct", method = RequestMethod.GET)
+	@GetMapping("/updateProduct")
 	public String updateProduct(Model model, @RequestParam("id") int id, RedirectAttributes redirectAttributes) {
 		Product product = productRepository.findById(id);
 		List<Category> categoryList = cateRepository.findCategoryAll();
@@ -73,13 +68,13 @@ public class ProductController {
 		return "ad_layout/createAdmin";
 	}
 
-	@RequestMapping(value = "/CHKupdateProduct", method = RequestMethod.PUT)
+	@PutMapping("/CHKupdateProduct")
 	public String chkUpdate(@RequestParam("id") int id, @Validated Product item) {
 		productRepository.updateProduct(item, id);
 		return "redirect:/admin/updateProduct?id=" + id;
 	}
 
-	@RequestMapping(value = "/findProduct", method = RequestMethod.POST)
+	@PostMapping("/findProduct")
 	public String findProduct(@RequestParam("txtSearch") String txtSearch, Model model) {
 		List<Product> productList = productRepository.findByName(txtSearch);
 		model.addAttribute("dataList", productList);
@@ -87,13 +82,13 @@ public class ProductController {
 	}
 
 	@CrossOrigin
-	@RequestMapping(value = "/createProduct", method = RequestMethod.POST)
+	@PostMapping("/createProduct")
 	public String createProduct(@Validated Product item) {
 		productRepository.insert(item);
 		return "redirect:/admin/create";
 	}
 
-	@RequestMapping(value = "/images", method = RequestMethod.GET)
+	@GetMapping("/images")
 	public String imageProduct(RedirectAttributes redirectAttributes, @RequestParam("id") int id, HttpSession session,
 			Model model) {
 		Product findProduct = productRepository.findById(id);
@@ -133,7 +128,7 @@ public class ProductController {
 		return "ad_layout/imageProduct";
 	}
 
-	@RequestMapping(value = "/addImages", method = RequestMethod.POST)
+	@PostMapping("/addImages")
 	public String addProduct(@RequestParam("img") MultipartFile images, RedirectAttributes redirectAttributes,
 			@RequestParam("id") int id) {
 		try {
@@ -146,7 +141,7 @@ public class ProductController {
 		return "redirect:/admin/images?id=" + id;
 	}
 
-	@RequestMapping(value = "/images/{filename:.+}", method = RequestMethod.GET)
+	@GetMapping("/images/{filename:.+}")
 	public ResponseEntity<Resource> getImage(@PathVariable String filename) throws IOException {
 		Resource file = storageService.load(filename);
 		return ResponseEntity.ok()
@@ -154,7 +149,7 @@ public class ProductController {
 				.body(file);
 	}
 
-	@RequestMapping(value = "/images/delete/{filename:.+}", method = RequestMethod.GET)
+	@GetMapping("/images/delete/{filename:.+}")
 	public String deleteImage(@PathVariable String filename, Model model, RedirectAttributes redirectAttributes,
 			@RequestParam("id") int id) {
 		try {
@@ -173,13 +168,13 @@ public class ProductController {
 		return "redirect:/admin/images?id=" + id;
 	}
 
-	@RequestMapping(value = "/images/deleteIMG/{idImage:.+}", method = RequestMethod.GET)
+	@GetMapping("/images/deleteIMG/{idImage:.+}")
 	public String delete(@PathVariable int idImage, @RequestParam("id") int id) {
 		imgRepository.deleteByID(idImage);
 		return "redirect:/admin/images?id=" + id;
 	}
 
-	@RequestMapping(value = "/images/updateMain", method = RequestMethod.POST)
+	@PostMapping("/images/updateMain")
 	public String updateMain(@RequestParam("productId") int id, @RequestParam("imgId") int imgId,
 			@RequestParam("isChecked") boolean isChecked) {
 		imgRepository.updateMain(1, imgId);
@@ -187,7 +182,7 @@ public class ProductController {
 		return "redirect:/admin/images?id=" + id;
 	}
 
-	@RequestMapping(value = "/saveImage", method = RequestMethod.POST)
+	@PostMapping("/saveImage")
 	public String saveImage(@RequestParam(value = "mainImg", required = false) String nameImg,
 			RedirectAttributes redirectAttributes, @RequestParam("id") int id) throws IOException {
 		String uploadDir = "src/main/resources/static/images/";

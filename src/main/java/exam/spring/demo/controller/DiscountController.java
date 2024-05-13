@@ -8,11 +8,7 @@ import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.annotation.Validated;
-import org.springframework.web.bind.annotation.CrossOrigin;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RequestParam;
-
+import org.springframework.web.bind.annotation.*;
 import exam.spring.demo.model.Brand;
 import exam.spring.demo.model.Discount;
 import exam.spring.demo.model.Product;
@@ -26,7 +22,7 @@ public class DiscountController {
 	DiscountRepository discountRepository;
 	@Autowired
 	ProductRepository productRepository;
-	@RequestMapping(value = "/discountView", method = RequestMethod.GET)
+	@GetMapping("/discountView")
 	public String index(@RequestParam("id") int id,Model model, @RequestParam(defaultValue = "0") int page,
 			@RequestParam(defaultValue = "5") int size) {
 		int offset = page * size;
@@ -49,13 +45,13 @@ public class DiscountController {
 		model.addAttribute("currentPage", page);
 		return "ad_layout/discountView";
 	}
-	@RequestMapping(value="/discountAdd",method=RequestMethod.PUT)
+	@PutMapping("/discountAdd")
 	public String addDiscoutn(@RequestParam("idProduct") int idProduct,@RequestParam("idDiscount") int idDiscount) {
 		System.out.println("id Dis:"+idDiscount);
 		productRepository.update(idDiscount, idProduct);
 		return "redirect:/admin/discountView?id="+idProduct;
 	}
-	@RequestMapping(value = "/discount", method = RequestMethod.GET)
+	@GetMapping("/discount")
 	public String indexDiscount(Model model, @RequestParam(defaultValue = "0") int page,
 			@RequestParam(defaultValue = "5") int size) {
 		int offset = page * size;
@@ -78,7 +74,7 @@ public class DiscountController {
 	}
 
 	@CrossOrigin
-	@RequestMapping(value = "/discountUpdate", method = RequestMethod.GET)
+	@GetMapping("/discountUpdate")
 	public String getBrand(@RequestParam("id") int id, Model model) {
 		Discount findDiscount = discountRepository.findById(id);
 		model.addAttribute("findDiscount", findDiscount);
@@ -96,13 +92,13 @@ public class DiscountController {
 		return "ad_layout/discountAdmin";
 	}
 	@CrossOrigin
-	@RequestMapping(value = "/updateDiscount", method = RequestMethod.PUT)
+	@PutMapping("/updateDiscount")
 	public String updateBrand(@Validated Discount item) {
 		discountRepository.update(item);
 		return "redirect:/admin/discount";
 	}
 	@CrossOrigin
-	@RequestMapping(value = "/submitDiscount", method = RequestMethod.POST)
+	@PostMapping("/submitDiscount")
 	public String saveBrand(@Validated Discount item, Model model) {
 		discountRepository.insert(item);
 		return "redirect:/admin/discount";

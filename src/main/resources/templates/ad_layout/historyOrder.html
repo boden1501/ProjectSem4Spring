@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<html>
+<head>
+<div th:replace="~{common/_style}"></div>
+<meta charset="ISO-8859-1">
+<title>Order List</title>
+</head>
+<body>
+	<div th:replace="~{common/_layoutHeader}"></div>
+	<form th:action="@{/admin/search}" method="post">
+		<input type="search" name="nameSearch"></input>
+		<!-- nhap tim kiem -->
+		<!--  <button type="submit">Search</button>-->
+	</form>
+
+	<div th:replace="~{common/_layoutFormHeader}"></div>
+	<!-- tieu de-->
+	<thead>
+		<tr>
+			<th>idOrder</th>
+			<th>DateCreate</th>
+			<th>TotalPrice</th>
+			<th>DiscountPrice</th>
+			<th>active</th>
+			<th>nameUser</th>
+			<th>phoneUser</th>
+			<th>addressUser</th>
+			<th>emailUser</th>
+			<th>idUser</th>
+		</tr>
+	</thead>
+	<!-- noi dung -->
+	<tbody>
+
+
+		<tr>
+			<tbody th:each="order : ${a}">
+				<form th:action="@{/admin/updateOrder}" th:method="put">
+					<!-- Thông tin của mỗi user -->
+					<td th:text="${order.idOrder}"></td>
+					<td th:text="${order.DateCreate}"></td>
+					<td th:text="${order.TotalPrice}"></td>
+					<td th:text="${order.discountPrice}"></td>
+					<td th:text="${order.active}"></td>
+					<td th:text="${order.nameUser}"></td>
+					<td th:text="${order.phoneUser}"></td>
+					<td th:text="${order.addressUser}"></td>
+					<td th:text="${order.emailUser}"></td>
+					<td th:text="${order.idUser}"></td>
+					<!-- <td><input type="checkbox" class="checkboxForm"
+					th:checked="${order.active == 0}" disabled></td>
+					 -->
+
+					<td class="text-left">
+						<!-- Hidden input chứa ID của user --> <input type="hidden"
+						name="idOrder" th:value="${order.idOrder}" /> <!-- Dropdown list cho các trạng thái -->
+						<select name="newStatus">
+							<option value="0" th:selected="${order.active==0}">Hủy</option>
+							<option value="1" th:selected="${order.active==1}">Chờ
+								Xác Nhận</option>
+							<option value="2" th:selected="${order.active==2}">Đã
+								Giao</option>
+								
+					</select> <!-- Nút "Submit" -->
+					<div th:if="${order.active == 2}">
+    				<p>Đơn hàng đã được giao và không thể cập nhật trạng thái.</p>
+					</div>
+ 					<input type="submit"
+						value="Cập Nhật Trạng Thái" /> <!-- Hidden input chứa ID của user -->
+						<!-- <input type="hidden"
+					th:name="id" th:value="${order.idOrder}" /> Nút "Cam" <input
+					type="submit" value="Inactive" th:if="${order.active==0}" /> Nút "Cho Phep"
+					<input type="submit" value="Active" th:if="${order.active==1}" />
+					Hidden input field để chỉ rõ active value <input
+					type="hidden" name="active" th:value="${order.active == 0 ? 1 : 0}" />
+					Hidden input field để chỉ rõ phương thức PUT <input
+					type="hidden" name="_method" value="PUT" /> -->
+					</td>
+
+					<!-- Hidden input field để chỉ rõ phương thức PUT -->
+					<input type="hidden" name="_method" value="PUT" />
+				</form>
+			</tbody>
+		</tr>
+
+		<div th:replace="~{common/_layoutFormFooter}"></div>
+		<div class="btn-group" role="group" arial-label="Basic example"
+			th:if="${totalPages != null && totalPages >0}">
+			<!-- thymeleaf loop de tao link cho moi trang -->
+			<a th:each="pageNum : ${#numbers.sequence(1, totalPages)}"
+				th:href="@{/admin/orderList(page=${pageNum})}" th:text="${pageNum}"
+				class="btn btn-outline-secondary"></a>
+		</div>
+		<div th:replace="~{common/_layoutFooter}"></div>
+</body>

@@ -114,45 +114,46 @@ function hideURLbar(){ window.scrollTo(0,1); }
 				<form th:action="@{/auth/register}" method="post">
 					<div class="key">
 						<i class="fa fa-user" aria-hidden="true"></i> <input id="name"
-							name="name" type="text" value="Name" onfocus="this.value = '';" required="">
+							name="name" type="text" value="Name" onfocus="this.value = '';" required="Please input your name!">
 						<div class="clearfix"></div>
 					</div>
 					<div class="key">
 						<i class="fa fa-user" aria-hidden="true"></i> <input
 							id="username_usr" name="username" type="text" value="Username"
 							onfocus="this.value = '';"
-							required="">
+							required="Please input your username!">
 						<div class="clearfix"></div>
 					</div>
 					<div class="key">
 						<i class="fa fa-lock" aria-hidden="true"></i> <input id="password"
 							name="password" type="password" value="Password"
 							onfocus="this.value = '';"
-							required="">
+							required="Please input your password!">
 						<div class="clearfix"></div>
 					</div>
 					<div class="key">
 						<i class="fa fa-envelope" aria-hidden="true"></i> <input
 							id="email_usr" name="email" type="text" value="Email"
 							onfocus="this.value = '';"
-							required="">
+							required="Please input your email address!">
 						<div class="clearfix"></div>
 					</div>
 					<div class="key">
 						<img alt="address" src="/assets/images/house.png" width="20"
 							height="20"> <input id="address" name="address" type="text"
 							value="Address" onfocus="this.value = '';"
-							required="">
+							required="Please input your address!">
 						<div class="clearfix"></div>
 					</div>
 					<div class="key">
 						<i class="fa fa-user" aria-hidden="true"></i> <input
 							id="phone_usr" name="phone" type="text" value="Phone"
 							onfocus="this.value = '';"
-							required="">
+							required="Please input your phone!">
 						<div class="clearfix"></div>
 					</div>
-
+<div th:text="${errorName}"></div>
+<div th:text="${errorEmail}"></div>
 
 					<input type="submit" value="Submit">
 				</form>
